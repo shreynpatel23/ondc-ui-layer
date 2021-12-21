@@ -1,7 +1,8 @@
 import "./App.css";
+import OndcRoutes from "./router";
 
 function App() {
-  return <p className="container">hello ondc ui</p>;
+  return <OndcRoutes />;
 }
 
 export default App;
