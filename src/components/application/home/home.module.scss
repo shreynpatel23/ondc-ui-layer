@@ -4,3 +4,40 @@
   height: 100%;
   background-color: $backgroundColor;
 }
+
+.home_card {
+  width: 500px;
+}
+
+.headline {
+  margin: 0;
+  font-size: $font-28;
+  font-weight: $medium;
+  color: $accentColor;
+}
+
+.sub_headline {
+  margin: 0;
+  font-size: $font-18;
+  font-weight: $medium;
+  color: $primaryColor;
+}
+
+.bodytext {
+  margin: 0;
+  font-size: $font-14;
+  color: $secondaryColor;
+}
+
+.search_by_text {
+  margin: 0;
+  font-size: $font-14;
+  color: $primaryColor;
+}
+
+.selected_search_type_value {
+  margin: 0;
+  font-size: $font-16;
+  font-weight: $medium;
+  color: $accentColor;
+}

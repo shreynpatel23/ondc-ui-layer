@@ -1,0 +1,29 @@
+@import "../../../assets/scss/variables.scss";
+
+.dropdown_link_wrapper {
+  padding: 15px;
+  cursor: pointer;
+}
+
+.dropdown_link {
+  font-size: $font-14;
+  color: $primaryColor;
+  margin: 0;
+}
+
+.active_dropdown_link {
+  font-size: $font-14;
+  font-weight: $medium;
+  color: $accentColor;
+  margin: 0;
+}
+
+.dropdown_link_wrapper:hover {
+  background-color: rgba($accentColor, 0.15);
+
+  .dropdown_link {
+    color: $accentColor;
+    font-weight: $medium;
+    transition: all 0.3s;
+  }
+}
