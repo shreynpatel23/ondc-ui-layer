@@ -5,7 +5,7 @@ import {
   Switch,
   Redirect,
 } from "react-router-dom";
-import PageNotFound from "./components/shared/page-not-found";
+import PageNotFound from "./components/shared/page-not-found/page-not-found";
 import Home from "./components/application/home/home";
 import ProductListing from "./components/application/product-listing/productListing";
 
