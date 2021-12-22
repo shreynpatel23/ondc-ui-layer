@@ -27,3 +27,24 @@
     transition: all 0.3s;
   }
 }
+
+.search_wrapper {
+  width: 100%;
+  background-color: rgba($placeholderText, 0.2);
+  border-radius: 8px;
+}
+
+.empty_text_header {
+  font-size: $font-20;
+  color: $primaryColor;
+  line-height: 2;
+  letter-spacing: 0.5px;
+  margin: 0;
+}
+
+.empty_text_sub_header {
+  font-size: $font-14;
+  color: $secondaryColor;
+  letter-spacing: 0.5px;
+  margin: 0;
+}

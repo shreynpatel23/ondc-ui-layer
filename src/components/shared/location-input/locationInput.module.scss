@@ -1,0 +1,49 @@
+@import "../../../assets/scss/variables.scss";
+
+.location_and_input_wrapper {
+  width: 100%;
+  height: 50px;
+  border: 1px solid $accentColor;
+  border-radius: 10px;
+}
+
+.location_wrapper {
+  flex-basis: 35%;
+  background-color: $accentColor;
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
+
+.location {
+  font-size: $font-12;
+  color: $white;
+  margin: 0;
+}
+
+.input_wrapper {
+  flex-basis: 65%;
+  background-color: $white;
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+.formControl {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 10px 15px;
+  font-size: $font-14;
+  font-weight: 400;
+  line-height: 1.5;
+  color: $primaryColor;
+  background-color: transparent;
+  border: 0;
+}
+
+.formControl:focus {
+  outline: none;
+}
+
+.formControl:disabled {
+  opacity: 0.5;
+}

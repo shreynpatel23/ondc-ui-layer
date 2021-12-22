@@ -3,6 +3,7 @@ import styles from "./home.module.scss";
 import Dropdown from "../../shared/dropdown/dropdown";
 import ArrowDown from "../../shared/svg/arrow-down";
 import { ONDC_COLORS } from "../../shared/colors";
+import LocationInput from "../../shared/location-input/locationInput";
 export default function Home() {
   const search_by_types = ["Product Name", "Category", "Provider"];
 
@@ -54,7 +55,10 @@ export default function Home() {
               </div>
             </Dropdown>
           </div>
-          {/* SEARCH BY INOUT */}
+          <div className="py-2">
+            {/* SEARCH BY INOUT */}
+            <LocationInput selectedSearchType={searchType} />
+          </div>
         </div>
       </div>
     </div>
