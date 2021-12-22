@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import styles from "./dropdown.module.scss";
 
 export default function Dropdown(props) {
@@ -37,7 +37,7 @@ export default function Dropdown(props) {
                   option === activeOption
                     ? styles.active_dropdown_link
                     : styles.dropdown_link
-                  }`}
+                }`}
               >
                 {option}
               </p>

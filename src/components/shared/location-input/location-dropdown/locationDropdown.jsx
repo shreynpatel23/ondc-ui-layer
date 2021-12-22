@@ -6,7 +6,7 @@ import { ONDC_COLORS } from "../../colors";
 
 export default function LocationDropdown(props) {
   const { id, children, click } = props;
-  const [locations, setLocations] = useState(["Pune", "Banglore", "Chennai"]);
+  const [locations] = useState(["Pune", "Banglore", "Chennai"]);
   const [searchedLocation, setSearchedLocation] = useState("");
 
   //   filter the locations

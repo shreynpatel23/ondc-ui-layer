@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import styles from "./locationInput.module.scss";
 import ArrowDown from "../svg/arrow-down";
 import { ONDC_COLORS } from "../colors";
@@ -22,7 +22,7 @@ export default function LocationInput(props) {
       return;
     }
     isLocationSelected(false);
-  }, [searchValue, selectedLocation]);
+  }, [searchValue, selectedLocation, isLocationSelected]);
   return (
     <div className={`d-flex ${styles.location_and_input_wrapper}`}>
       <div

@@ -46,5 +46,12 @@ export function getButtonStyle(type) {
         transition: "all 0.3s",
         buttonTextColor: ONDC_COLORS.WHITE,
       };
+    default:
+      return {
+        backgroundColor: ONDC_COLORS.ACCENTCOLOR,
+        border: 0,
+        transition: "all 0.3s",
+        buttonTextColor: ONDC_COLORS.WHITE,
+      };
   }
 }
