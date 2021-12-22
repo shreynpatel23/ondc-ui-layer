@@ -4,11 +4,16 @@ import Dropdown from "../../shared/dropdown/dropdown";
 import ArrowDown from "../../shared/svg/arrow-down";
 import { ONDC_COLORS } from "../../shared/colors";
 import LocationInput from "../../shared/location-input/locationInput";
+import Button from "../../shared/button/button";
+import { buttonTypes, buttonSize } from "../../../utils/button";
 export default function Home() {
   const search_by_types = ["Product Name", "Category", "Provider"];
 
   // states
   const [searchType, setSearchType] = useState(search_by_types[0]);
+  const [isLocationSelected, setIsLocationSelected] = useState(false);
+  const [selectedLocation, setSelectedLocation] = useState();
+  const [searchValue, setSearchValue] = useState("");
   return (
     <div
       className={`${styles.background} d-flex align-items-center justify-content-center`}
@@ -57,7 +62,35 @@ export default function Home() {
           </div>
           <div className="py-2">
             {/* SEARCH BY INOUT */}
-            <LocationInput selectedSearchType={searchType} />
+            <LocationInput
+              selectedSearchType={searchType}
+              selectedLocation={selectedLocation}
+              searchValue={searchValue}
+              setSelectedLocation={(value) => setSelectedLocation(value)}
+              setSearchValue={(value) => setSearchValue(value)}
+              isLocationSelected={(value) => setIsLocationSelected(value)}
+            />
+          </div>
+          <div className="py-3 d-flex align-items-center">
+            <div className="pe-3">
+              <Button
+                button_text="Clear"
+                type={buttonTypes.secondary}
+                size={buttonSize.small}
+                onClick={() => {
+                  setSelectedLocation();
+                  setSearchValue("");
+                }}
+              />
+            </div>
+            <div className="pe-3">
+              <Button
+                button_text="Search"
+                type={buttonTypes.primary}
+                size={buttonSize.small}
+                disabled={!isLocationSelected}
+              />
+            </div>
           </div>
         </div>
       </div>

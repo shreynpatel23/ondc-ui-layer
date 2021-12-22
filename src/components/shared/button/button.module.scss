@@ -1,0 +1,18 @@
+@import "../../../assets/scss/variables.scss";
+
+.btn {
+  height: 40px;
+  box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+}
+
+.btn_text {
+  font-size: $font-14;
+  text-align: center;
+  margin: 0;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: no-drop;
+}
