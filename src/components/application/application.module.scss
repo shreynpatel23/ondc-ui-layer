@@ -1,8 +1,9 @@
-@import "../../../assets/scss/variables.scss";
+@import "../../assets/scss/variables.scss";
 
 .background {
   height: 100%;
   background-color: $backgroundColor;
+  overflow: auto;
 }
 
 .home_card {
@@ -40,4 +41,14 @@
   font-size: $font-16;
   font-weight: $medium;
   color: $accentColor;
+}
+
+.search_wrapper {
+  width: 50%;
+}
+
+@media screen and (max-width: 786px) {
+  .search_wrapper {
+    width: 100%;
+  }
 }

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styles from "./home.module.scss";
+import styles from "../application.module.scss";
 import Dropdown from "../../shared/dropdown/dropdown";
 import ArrowDown from "../../shared/svg/arrow-down";
 import { ONDC_COLORS } from "../../shared/colors";
@@ -7,8 +7,11 @@ import LocationInput from "../../shared/location-input/locationInput";
 import Button from "../../shared/button/button";
 import { buttonTypes, buttonSize } from "../../../utils/button";
 import { callPostApi } from "../../../api";
+import { useHistory } from "react-router-dom";
+import { search_by_types } from "../../../constants/search-types";
+import { dropdownTypes } from "../../../constants/dropdown-types";
 export default function Home() {
-  const search_by_types = ["Product Name", "Category", "Provider"];
+  const history = useHistory();
 
   // states
   const [searchType, setSearchType] = useState(search_by_types[0]);
@@ -34,6 +37,8 @@ export default function Home() {
       console.log(err);
     } finally {
       setLoading(false);
+      // move this to try block
+      history.push("/products");
     }
   }
 
@@ -92,6 +97,7 @@ export default function Home() {
               setSelectedLocation={(value) => setSelectedLocation(value)}
               setSearchValue={(value) => setSearchValue(value)}
               isLocationSelected={(value) => setIsLocationSelected(value)}
+              dropdownType={dropdownTypes.UP}
             />
           </div>
           <div className="py-3 d-flex align-items-center">

@@ -5,7 +5,7 @@ import SearchSvg from "../../svg/search";
 import { ONDC_COLORS } from "../../colors";
 
 export default function LocationDropdown(props) {
-  const { id, children, click } = props;
+  const { id, children, click, dropdownType } = props;
   const [locations] = useState(["Pune", "Banglore", "Chennai"]);
   const [searchedLocation, setSearchedLocation] = useState("");
 
@@ -16,7 +16,7 @@ export default function LocationDropdown(props) {
     );
   }
   return (
-    <div className="dropup">
+    <div className={dropdownType}>
       <div
         type="button"
         id={id}

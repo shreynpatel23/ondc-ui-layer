@@ -5,6 +5,7 @@ import { ONDC_COLORS } from "../colors";
 import LocationSvg from "../svg/location";
 import LocationDropdown from "./location-dropdown/locationDropdown";
 import CrossSvg from "../svg/cross";
+import { dropdownTypes } from "../../../constants/dropdown-types";
 
 export default function LocationInput(props) {
   const {
@@ -13,7 +14,8 @@ export default function LocationInput(props) {
     searchValue,
     setSelectedLocation,
     setSearchValue,
-    isLocationSelected,
+    isLocationSelected = () => {},
+    dropdownType = dropdownTypes.DOWN,
   } = props;
 
   useEffect(() => {
@@ -32,6 +34,7 @@ export default function LocationInput(props) {
         <LocationDropdown
           id="location-dropdown"
           click={(value) => setSelectedLocation(value)}
+          dropdownType={dropdownType}
         >
           <div className="d-flex align-items-center">
             <div className="px-1">

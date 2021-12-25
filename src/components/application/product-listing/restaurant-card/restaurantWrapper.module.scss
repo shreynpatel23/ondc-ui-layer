@@ -1,0 +1,20 @@
+@import "../../../../assets/scss/variables.scss";
+
+.restaurant_logo {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+}
+
+.restaurant_name {
+  font-size: $font-14;
+  color: $primaryColor;
+  font-weight: 500;
+  margin: 0;
+}
+
+.provider_name {
+  font-size: $font-12;
+  color: $secondaryColor;
+  margin: 0;
+}
