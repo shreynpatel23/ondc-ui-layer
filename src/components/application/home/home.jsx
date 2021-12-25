@@ -6,6 +6,7 @@ import { ONDC_COLORS } from "../../shared/colors";
 import LocationInput from "../../shared/location-input/locationInput";
 import Button from "../../shared/button/button";
 import { buttonTypes, buttonSize } from "../../../utils/button";
+import { callPostApi } from "../../../api";
 export default function Home() {
   const search_by_types = ["Product Name", "Category", "Provider"];
 
@@ -14,6 +15,28 @@ export default function Home() {
   const [isLocationSelected, setIsLocationSelected] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState();
   const [searchValue, setSearchValue] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  async function handleSearchProduct() {
+    setLoading(true);
+    try {
+      const { data } = await callPostApi("/client/v1/search", {
+        context: {},
+        message: {
+          criteria: {
+            search_string: searchValue,
+            delivery_location: "12.903561,77.5939631",
+          },
+        },
+      });
+      console.log(data);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <div
       className={`${styles.background} d-flex align-items-center justify-content-center`}
@@ -75,6 +98,7 @@ export default function Home() {
             <div className="pe-3">
               <Button
                 button_text="Clear"
+                disabled={loading}
                 type={buttonTypes.secondary}
                 size={buttonSize.small}
                 onClick={() => {
@@ -88,7 +112,9 @@ export default function Home() {
                 button_text="Search"
                 type={buttonTypes.primary}
                 size={buttonSize.small}
-                disabled={!isLocationSelected}
+                loading={loading ? 1 : 0}
+                disabled={!isLocationSelected || loading}
+                onClick={handleSearchProduct}
               />
             </div>
           </div>

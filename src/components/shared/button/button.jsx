@@ -3,6 +3,7 @@ import styles from "./button.module.scss";
 import { getButtonStyle, buttonSize } from "../../../utils/button";
 
 export default function Button(props) {
+  const { loading = false } = props;
   const buttonStyle = getButtonStyle(props.type);
   return (
     <button
@@ -18,12 +19,22 @@ export default function Button(props) {
             : "110px",
       }}
     >
-      <p
-        className={styles.btn_text}
-        style={{ color: buttonStyle.buttonTextColor }}
-      >
-        {props.button_text}
-      </p>
+      {loading === 1 ? (
+        <div className="d-flex align-items-center justify-content-center">
+          <div
+            className="spinner-border spinner-border-sm text-light"
+            role="status"
+            aria-hidden="true"
+          ></div>
+        </div>
+      ) : (
+        <p
+          className={styles.btn_text}
+          style={{ color: buttonStyle.buttonTextColor }}
+        >
+          {props.button_text}
+        </p>
+      )}
     </button>
   );
 }
