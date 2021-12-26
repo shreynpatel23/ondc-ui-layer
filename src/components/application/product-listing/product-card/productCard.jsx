@@ -1,10 +1,10 @@
 import React from "react";
 import styles from "./productCard.module.scss";
+import no_image_found from "../../../../assets/images/no_image_found.png";
+import RuppeSvg from "../../../shared/svg/ruppe";
 
 export default function ProductCard(props) {
   const { price, descriptor } = props;
-  const no_image_found =
-    "https://st4.depositphotos.com/14953852/24787/v/600/depositphotos_247872612-stock-illustration-no-image-available-icon-vector.jpg";
   return (
     <div className={styles.card_bg}>
       <div className={styles.product_img_container}>
@@ -19,7 +19,19 @@ export default function ProductCard(props) {
         />
       </div>
       <div className="p-3">
-        <p className={styles.prodcut_name}>{descriptor.name}</p>
+        <div className={styles.description_wrapper}>
+          <p className={styles.prodcut_name} title={descriptor.name}>
+            {descriptor.name.length > 35
+              ? `${descriptor.name.substr(0, 35)}...`
+              : descriptor.name}
+          </p>
+        </div>
+        <div className="py-2 d-flex align-items-center">
+          <div className="pe-2">
+            <RuppeSvg height="13" width="8" />
+          </div>
+          <p className={styles.amount}>{Math.round(price.value)}</p>
+        </div>
       </div>
     </div>
   );

@@ -2,14 +2,13 @@
 
 .card_bg {
   width: 200px;
-  height: 240px;
   background-color: $white;
   box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.15);
   border-radius: 8px;
 }
 
 .product_img_container {
-  height: 60%;
+  height: 150px;
   width: 100%;
 }
 
@@ -20,9 +19,20 @@
   border-top-right-radius: 8px;
 }
 
+.description_wrapper {
+  height: 40px;
+}
+
 .prodcut_name {
   font-size: $font-12;
   font-weight: 500;
   color: $primaryColor;
+  margin: 0;
+}
+
+.amount {
+  font-size: $font-14;
+  font-weight: 500;
+  color: $accentColor;
   margin: 0;
 }

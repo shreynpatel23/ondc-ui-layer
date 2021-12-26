@@ -60,11 +60,14 @@ export default function ProductListing() {
         <div className={"py-2"}>
           {products.map((product, index) => {
             return (
-              <div key={`${product.bpp_id}-id-${index}`}>
+              <Fragment key={`${product.bpp_id}-id-${index}`}>
                 {product.bpp_providers.map(
                   ({ id, descriptor, items }, product_index) => {
                     return (
-                      <div key={`${id}-product-id-${product_index}`}>
+                      <div
+                        key={`${id}-product-id-${product_index}`}
+                        className="pb-3"
+                      >
                         <RestaurantCard
                           descriptor={descriptor}
                           items={items}
@@ -74,7 +77,7 @@ export default function ProductListing() {
                     );
                   }
                 )}
-              </div>
+              </Fragment>
             );
           })}
         </div>
