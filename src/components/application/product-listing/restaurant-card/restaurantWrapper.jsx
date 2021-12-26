@@ -1,10 +1,20 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useContext } from "react";
 import styles from "./restaurantWrapper.module.scss";
 import ProductCard from "../product-card/productCard";
 import no_image_found from "../../../../assets/images/no_image_found.png";
+import { CartContext } from "../../../../context/cartContext";
 
 export default function RestaurantWrapper(props) {
-  const { descriptor, items, provider_name } = props;
+  const {
+    descriptor,
+    items,
+    provider_name,
+    bpp_id,
+    location_id,
+    bpp_provider_id,
+  } = props;
+
+  const cartContext = useContext(CartContext);
 
   return (
     <Fragment>
@@ -32,7 +42,38 @@ export default function RestaurantWrapper(props) {
           {items.map(({ id, descriptor, price }) => {
             return (
               <div key={id} className="p-2">
-                <ProductCard descriptor={descriptor} price={price} />
+                <ProductCard
+                  descriptor={descriptor}
+                  price={price}
+                  product_id={id}
+                  bpp_id={bpp_id}
+                  location_id={location_id}
+                  bpp_provider_id={bpp_provider_id}
+                  onUpdateCart={(value) => {
+                    // check if the product is present or not
+                    const product = cartContext.cartItems.find(
+                      (product) => product.id === value.id
+                    );
+                    // if present than update the product count
+                    if (product) {
+                      const productInCart = cartContext.cartItems.map(
+                        (item) => {
+                          if (item.id === value.id) {
+                            return {
+                              ...item,
+                              quantity: value.quantity,
+                            };
+                          }
+                          return { ...item };
+                        }
+                      );
+                      cartContext.setCartItems(productInCart);
+                      return;
+                    }
+                    // else push the product in array
+                    cartContext.setCartItems([...cartContext.cartItems, value]);
+                  }}
+                />
               </div>
             );
           })}

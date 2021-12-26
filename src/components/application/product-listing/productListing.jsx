@@ -62,7 +62,7 @@ export default function ProductListing() {
             return (
               <Fragment key={`${product.bpp_id}-id-${index}`}>
                 {product.bpp_providers.map(
-                  ({ id, descriptor, items }, product_index) => {
+                  ({ id, descriptor, items, locations }, product_index) => {
                     return (
                       <div
                         key={`${id}-product-id-${product_index}`}
@@ -72,6 +72,9 @@ export default function ProductListing() {
                           descriptor={descriptor}
                           items={items}
                           provider_name={product.bpp_descriptor.name}
+                          bpp_id={product.bpp_id}
+                          location_id={locations[0].id}
+                          bpp_provider_id={id}
                         />
                       </div>
                     );

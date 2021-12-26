@@ -1,10 +1,39 @@
 @import "../../../../assets/scss/variables.scss";
 
+$card_width: 200px;
+
 .card_bg {
-  width: 200px;
+  width: $card_width;
   background-color: $white;
   box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.15);
   border-radius: 8px;
+  position: relative;
+}
+
+.overlay {
+  background-color: rgba($primaryColor, $alpha: 0.5);
+  width: 100%;
+  height: 100%;
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 8px;
+}
+
+.button_placement_for_add_to_cart {
+  position: absolute;
+  bottom: 20px;
+}
+
+.button_wrapper {
+  width: $card_width;
+}
+
+.card_bg:hover {
+  .overlay {
+    display: block;
+  }
 }
 
 .product_img_container {
