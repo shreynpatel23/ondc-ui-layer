@@ -6,15 +6,8 @@ import Button from "../../../shared/button/button";
 import { buttonTypes, buttonSize } from "../../../../utils/button";
 
 export default function ProductCard(props) {
-  const {
-    price,
-    descriptor,
-    product_id,
-    bpp_id,
-    location_id,
-    bpp_provider_id,
-    onUpdateCart,
-  } = props;
+  const { product, bpp_id, location_id, bpp_provider_id, onUpdateCart } = props;
+  const { id, descriptor, price } = product;
   const [quantityCount, setQuantityCount] = useState(0);
   return (
     <div className={styles.card_bg}>
@@ -32,13 +25,14 @@ export default function ProductCard(props) {
               onClick={() => {
                 setQuantityCount(quantityCount + 1);
                 onUpdateCart({
-                  id: product_id,
+                  id,
                   quantity: { count: quantityCount + 1 },
                   bpp_id,
                   provider: {
                     id: bpp_provider_id,
                     location: [location_id],
                   },
+                  product,
                 });
               }}
             />

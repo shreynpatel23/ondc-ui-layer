@@ -39,13 +39,11 @@ export default function RestaurantWrapper(props) {
       </div>
       <div className="py-2">
         <div className="d-flex align-items-center flex-wrap">
-          {items.map(({ id, descriptor, price }) => {
+          {items.map((product) => {
             return (
-              <div key={id} className="p-2">
+              <div key={product.id} className="p-2">
                 <ProductCard
-                  descriptor={descriptor}
-                  price={price}
-                  product_id={id}
+                  product={product}
                   bpp_id={bpp_id}
                   location_id={location_id}
                   bpp_provider_id={bpp_provider_id}
