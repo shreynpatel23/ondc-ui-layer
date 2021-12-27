@@ -7,21 +7,29 @@ import { search_by_types } from "../../../constants/search-types";
 import { ONDC_COLORS } from "../../shared/colors";
 import RestaurantCard from "./restaurant-card/restaurantWrapper";
 import { callGetApi } from "../../../api";
+import { useLocation } from "react-router-dom";
+import Toast from "../../shared/toast/toast";
 
 export default function ProductListing() {
+  const uselocation = useLocation();
+  const {
+    state: { location, message_id, search_value },
+  } = uselocation;
+  console.log({ location, message_id, search_value });
   //states
   const [searchType, setSearchType] = useState(search_by_types[0]);
   const [selectedLocation, setSelectedLocation] = useState();
   const [searchValue, setSearchValue] = useState("");
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     setLoading(true);
     async function getProducts() {
       try {
         const { data } = await callGetApi(
-          "/products/on-search/b3c054f3-d908-4d39-b9d0-117c4354d30d"
+          `/products/on-search?message_id=${message_id}`
         );
         const filteredProducts = data.message.catalogs.map((catalog) => {
           if (catalog?.bpp_providers) {
@@ -31,8 +39,9 @@ export default function ProductListing() {
           }
         });
         setProducts(filteredProducts);
-      } catch (err) {
-        console.log(err);
+      } catch (error) {
+        const { err } = error.response.data;
+        setError(err);
       } finally {
         setLoading(false);
       }
@@ -55,6 +64,7 @@ export default function ProductListing() {
 
   return (
     <div className={styles.background}>
+      {error && <Toast message={error} onRemove={() => setError("")} />}
       {loading ? (
         loadingSpinner
       ) : (
@@ -101,7 +111,6 @@ export default function ProductListing() {
           {/* PRODUCTS LIST  */}
           <div className={"py-2"}>
             {products?.map((product, index) => {
-              console.log(product);
               return (
                 <Fragment key={`${product.bpp_id}-id-${index}`}>
                   {product?.bpp_providers.map(

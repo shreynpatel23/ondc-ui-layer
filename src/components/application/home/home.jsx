@@ -10,6 +10,7 @@ import { callPostApi } from "../../../api";
 import { useHistory } from "react-router-dom";
 import { search_by_types } from "../../../constants/search-types";
 import { dropdownTypes } from "../../../constants/dropdown-types";
+import Toast from "../../shared/toast/toast";
 export default function Home() {
   const history = useHistory();
 
@@ -19,26 +20,26 @@ export default function Home() {
   const [selectedLocation, setSelectedLocation] = useState();
   const [searchValue, setSearchValue] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   async function handleSearchProduct() {
     setLoading(true);
     try {
-      const { data } = await callPostApi("/client/v1/search", {
-        context: {},
-        message: {
-          criteria: {
-            search_string: searchValue,
-            delivery_location: "12.903561,77.5939631",
-          },
-        },
+      const { data } = await callPostApi("/products/get-products", {
+        search_value: searchValue,
+        location: "12.903561,77.5939631",
       });
-      console.log(data);
-    } catch (err) {
-      console.log(err);
+      const { context } = data;
+      history.push("/products", {
+        message_id: context.message_id,
+        location: selectedLocation,
+        search_value: searchValue,
+      });
+    } catch (error) {
+      const { err } = error.response.data;
+      setError(err);
     } finally {
       setLoading(false);
-      // move this to try block
-      history.push("/products");
     }
   }
 
@@ -46,6 +47,7 @@ export default function Home() {
     <div
       className={`${styles.background} d-flex align-items-center justify-content-center`}
     >
+      {error && <Toast message={error} onRemove={() => setError("")}/>}
       <div className={styles.home_card}>
         {/* HEADLINE  */}
         <div className="py-2">

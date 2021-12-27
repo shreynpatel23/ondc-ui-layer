@@ -1,0 +1,17 @@
+@import '../../../assets/scss/variables.scss';
+
+.toast_placement {
+    position: fixed;
+    top: 50px;
+    right: 20px;
+    animation: slide 0.3s ease-in forwards;
+}
+
+@keyframes slide {
+    from {
+        right: -200px;
+    }
+    to {
+        right: 20px;
+    }
+}
