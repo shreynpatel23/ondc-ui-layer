@@ -6,7 +6,7 @@ export function callGetApi(url) {
   return new Promise(async (resolve, reject) => {
     try {
       const response = await axios.get(url);
-      return resolve(response);
+      return resolve(response.data);
     } catch (err) {
       return reject(err);
     }
@@ -17,7 +17,7 @@ export function callPostApi(url, params) {
   return new Promise(async (resolve, reject) => {
     try {
       const response = await axios.post(url, params);
-      return resolve(response);
+      return resolve(response.data);
     } catch (err) {
       return reject(err);
     }
