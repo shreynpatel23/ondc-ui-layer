@@ -47,7 +47,7 @@ export default function ProductListing() {
       }
     }
     getProducts();
-  }, [searchValue]);
+  }, [message_id]);
 
   const loadingSpinner = (
     <div
