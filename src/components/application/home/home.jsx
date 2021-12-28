@@ -32,8 +32,6 @@ export default function Home() {
       const { context } = data;
       history.push("/products", {
         message_id: context.message_id,
-        location: selectedLocation,
-        search_value: searchValue,
       });
     } catch (error) {
       const { err } = error.response.data;

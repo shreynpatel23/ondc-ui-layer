@@ -17,7 +17,7 @@ export default function RestaurantWrapper(props) {
   const cartContext = useContext(CartContext);
 
   return (
-    <Fragment>
+    <div className="container">
       <div className="px-2 py-1 d-flex align-items-center">
         <div className="pe-2">
           <img
@@ -38,10 +38,10 @@ export default function RestaurantWrapper(props) {
         </div>
       </div>
       <div className="py-2">
-        <div className="d-flex align-items-center flex-wrap">
+        <div className="row">
           {items.map((product) => {
             return (
-              <div key={product.id} className="p-2">
+              <div key={product.id} className=" col-lg-3 col-md-4 col-sm-6 p-2">
                 <ProductCard
                   product={product}
                   bpp_id={bpp_id}
@@ -77,6 +77,6 @@ export default function RestaurantWrapper(props) {
           })}
         </div>
       </div>
-    </Fragment>
+    </div>
   );
 }
