@@ -1,4 +1,4 @@
-import React, { useState, Fragment, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "../application.module.scss";
 import RestaurantCard from "./restaurant-card/restaurantWrapper";
 import { callGetApi } from "../../../api";

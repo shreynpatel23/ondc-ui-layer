@@ -1,4 +1,4 @@
-import React, { Fragment, useContext } from "react";
+import React, { useContext } from "react";
 import styles from "./restaurantWrapper.module.scss";
 import ProductCard from "../product-card/productCard";
 import no_image_found from "../../../../assets/images/no_image_found.png";
@@ -41,13 +41,16 @@ export default function RestaurantWrapper(props) {
         <div className="row">
           {items.map((product) => {
             return (
-              <div key={product.id} className=" col-lg-3 col-md-4 col-sm-6 p-2">
+              <div
+                key={product.id}
+                className="col-xl-3 col-lg-4 col-md-6 col-sm-6 p-3"
+              >
                 <ProductCard
                   product={product}
                   bpp_id={bpp_id}
                   location_id={location_id}
                   bpp_provider_id={bpp_provider_id}
-                  onUpdateCart={(value) => {
+                  onAddProductToCart={(value) => {
                     // check if the product is present or not
                     const product = cartContext.cartItems.find(
                       (product) => product.id === value.id
@@ -70,6 +73,26 @@ export default function RestaurantWrapper(props) {
                     }
                     // else push the product in array
                     cartContext.setCartItems([...cartContext.cartItems, value]);
+                  }}
+                  onRemoveProductFromCart={(value) => {
+                    // if the quantity is 0 than we will remove from list
+                    if (value.quantity.count === 0) {
+                      const filteredProducts = cartContext.cartItems.filter(
+                        (product) => product.id !== value.id
+                      );
+                      cartContext.setCartItems(filteredProducts);
+                      return;
+                    }
+                    const productInCart = cartContext.cartItems.map((item) => {
+                      if (item.id === value.id) {
+                        return {
+                          ...item,
+                          quantity: value.quantity,
+                        };
+                      }
+                      return { ...item };
+                    });
+                    cartContext.setCartItems(productInCart);
                   }}
                 />
               </div>
