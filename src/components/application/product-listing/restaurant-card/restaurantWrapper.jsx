@@ -17,12 +17,16 @@ export default function RestaurantWrapper(props) {
   const cartContext = useContext(CartContext);
 
   return (
-    <div className="container">
+    <div className="container pb-2">
       <div className="px-2 py-1 d-flex align-items-center">
         <div className="pe-2">
           <img
-            src={descriptor.images[0] ?? no_image_found}
-            alt={descriptor.name}
+            src={
+              descriptor?.images.length > 0
+                ? descriptor?.images[0]
+                : no_image_found
+            }
+            alt={descriptor?.name}
             className={styles.restaurant_logo}
             onError={(event) => {
               event.target.onerror = null;
@@ -37,7 +41,7 @@ export default function RestaurantWrapper(props) {
           <p className={styles.provider_name}>By - {provider_name}</p>
         </div>
       </div>
-      <div className="py-2">
+      <div className="pb-2">
         <div className="row">
           {items.map((product) => {
             return (
