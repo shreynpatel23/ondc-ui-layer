@@ -9,12 +9,12 @@ import { buttonTypes, buttonSize } from "../../../../utils/button";
 import CartItems from "./cart-items/cartItems";
 
 export default function OrderSummary() {
-  const cartContext = useContext(CartContext);
+  const { cartItems, setCartItems } = useContext(CartContext);
   const [toggleCollapse, setToggleCollapse] = useState(false);
 
   function getSubTotal() {
     let sum = 0;
-    cartContext.cartItems.forEach(({ product, quantity }) => {
+    cartItems.forEach(({ product, quantity }) => {
       if (quantity.count < 2) {
         sum += Number(product.price.value);
         return;
@@ -63,7 +63,7 @@ export default function OrderSummary() {
               </div>
               <div className="px-2">
                 <p className={styles.total_items_in_cart_text}>
-                  Items in cart ({cartContext.cartItems.length})
+                  Items in cart ({cartItems.length})
                 </p>
               </div>
               <div className="ms-auto">
@@ -88,7 +88,7 @@ export default function OrderSummary() {
                 // disabled={loading}
                 type={buttonTypes.secondary}
                 size={buttonSize.small}
-                onClick={() => cartContext.setCartItems([])}
+                onClick={() => setCartItems([])}
               />
             </div>
             <div className="px-2">

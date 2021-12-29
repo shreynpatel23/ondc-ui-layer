@@ -14,7 +14,7 @@ export default function RestaurantWrapper(props) {
     bpp_provider_id,
   } = props;
 
-  const cartContext = useContext(CartContext);
+  const { cartItems, setCartItems } = useContext(CartContext);
   return (
     <div className="pb-2">
       <div className="px-2 py-1 d-flex align-items-center">
@@ -53,40 +53,11 @@ export default function RestaurantWrapper(props) {
                   bpp_id={bpp_id}
                   location_id={location_id}
                   bpp_provider_id={bpp_provider_id}
-                  onAddProductToCart={(value) => {
-                    // check if the product is present or not
-                    const product = cartContext.cartItems.find(
-                      (product) => product.id === value.id
-                    );
-                    // if present than update the product count
-                    if (product) {
-                      const productInCart = cartContext.cartItems.map(
-                        (item) => {
-                          if (item.id === value.id) {
-                            return {
-                              ...item,
-                              quantity: value.quantity,
-                            };
-                          }
-                          return { ...item };
-                        }
-                      );
-                      cartContext.setCartItems(productInCart);
-                      return;
-                    }
-                    // else push the product in array
-                    cartContext.setCartItems([...cartContext.cartItems, value]);
-                  }}
-                  onRemoveProductFromCart={(value) => {
-                    // if the quantity is 0 than we will remove from list
-                    if (value.quantity.count === 0) {
-                      const filteredProducts = cartContext.cartItems.filter(
-                        (product) => product.id !== value.id
-                      );
-                      cartContext.setCartItems(filteredProducts);
-                      return;
-                    }
-                    const productInCart = cartContext.cartItems.map((item) => {
+                  onAddProductToCart={(value) =>
+                    setCartItems([...cartItems, value])
+                  }
+                  onAddQuantityOfProduct={(value) => {
+                    const productInCart = cartItems.map((item) => {
                       if (item.id === value.id) {
                         return {
                           ...item,
@@ -95,7 +66,27 @@ export default function RestaurantWrapper(props) {
                       }
                       return { ...item };
                     });
-                    cartContext.setCartItems(productInCart);
+                    setCartItems(productInCart);
+                  }}
+                  onRemoveProductFromCart={(value) => {
+                    // if the quantity is 0 than we will remove from list
+                    if (value.quantity.count === 0) {
+                      const filteredProducts = cartItems.filter(
+                        (product) => product.id !== value.id
+                      );
+                      setCartItems(filteredProducts);
+                      return;
+                    }
+                    const productInCart = cartItems.map((item) => {
+                      if (item.id === value.id) {
+                        return {
+                          ...item,
+                          quantity: value.quantity,
+                        };
+                      }
+                      return { ...item };
+                    });
+                    setCartItems(productInCart);
                   }}
                 />
               </div>

@@ -16,15 +16,14 @@ export default function ProductCard(props) {
     bpp_provider_id,
     onAddProductToCart,
     onRemoveProductFromCart,
+    onAddQuantityOfProduct,
   } = props;
   const { id, descriptor, price } = product;
   const [quantityCount, setQuantityCount] = useState();
   const [toggleAddToCart, setToggleAddToCart] = useState();
-  const cartContext = useContext(CartContext);
+  const { cartItems } = useContext(CartContext);
   useEffect(() => {
-    const isProductPresent = cartContext.cartItems.find(
-      ({ product }) => product.id === id
-    );
+    const isProductPresent = cartItems.find(({ product }) => product.id === id);
     if (isProductPresent) {
       setToggleAddToCart(true);
       setQuantityCount(isProductPresent.quantity.count);
@@ -32,7 +31,7 @@ export default function ProductCard(props) {
       setToggleAddToCart(false);
       setQuantityCount(0);
     }
-  }, [cartContext, id]);
+  }, [cartItems, id]);
   return (
     <div className={`${styles.card_bg} d-flex align-items-start`}>
       <div className={styles.product_img_container}>
@@ -90,15 +89,9 @@ export default function ProductCard(props) {
                     className="px-1 flex-fill"
                     onClick={() => {
                       setQuantityCount(quantityCount + 1);
-                      onAddProductToCart({
+                      onAddQuantityOfProduct({
                         id,
                         quantity: { count: quantityCount + 1 },
-                        bpp_id,
-                        provider: {
-                          id: bpp_provider_id,
-                          location: [location_id],
-                        },
-                        product,
                       });
                     }}
                     style={{ cursor: "pointer" }}
@@ -120,7 +113,14 @@ export default function ProductCard(props) {
                         id: bpp_provider_id,
                         location: [location_id],
                       },
-                      product,
+                      product: {
+                        id: product.id,
+                        descriptor: product.descriptor,
+                        price: {
+                          ...product.price,
+                          value: Math.round(price.value),
+                        },
+                      },
                     });
                   }}
                   style={{ cursor: "pointer" }}
