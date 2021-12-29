@@ -30,13 +30,14 @@ export default function Home() {
         location: "12.903561,77.5939631",
       });
       const { context } = data;
+      localStorage.setItem("transaction_id", context.transaction_id);
+      setLoading(false);
       history.push("/products", {
         message_id: context.message_id,
       });
     } catch (error) {
       const { err } = error.response.data;
       setError(err);
-    } finally {
       setLoading(false);
     }
   }
@@ -45,7 +46,7 @@ export default function Home() {
     <div
       className={`${styles.background} d-flex align-items-center justify-content-center`}
     >
-      {error && <Toast message={error} onRemove={() => setError("")}/>}
+      {error && <Toast message={error} onRemove={() => setError("")} />}
       <div className={styles.home_card}>
         {/* HEADLINE  */}
         <div className="py-2">

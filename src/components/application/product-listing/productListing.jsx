@@ -27,7 +27,7 @@ export default function ProductListing() {
         return;
       }
       // this check to clear the interval if we get the success response
-      clearInterval(timer);
+      // clearInterval(timer);
       const filteredProducts = data.message.catalogs.map((catalog) => {
         if (catalog?.bpp_providers) {
           return { ...catalog };
@@ -47,6 +47,9 @@ export default function ProductListing() {
 
   useEffect(() => {
     getProducts();
+    return () => {
+      setLoading(false);
+    };
   }, [getProducts]);
 
   function callApiMultipleTimes() {

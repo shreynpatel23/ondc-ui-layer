@@ -1,4 +1,5 @@
 import "./App.css";
+import { BrowserRouter as Router } from "react-router-dom";
 import OndcRoutes from "./router";
 import Navbar from "./components/shared/navbar/navbar";
 import { CartContext } from "./context/cartContext";
@@ -8,7 +9,7 @@ import OrderSummary from "./components/application/product-listing/order-summary
 function App() {
   const { cartItems } = useContext(CartContext);
   return (
-    <>
+    <Router>
       <Navbar />
       <div
         className={
@@ -20,7 +21,7 @@ function App() {
         <OndcRoutes />
       </div>
       {cartItems.length > 0 && <OrderSummary />}
-    </>
+    </Router>
   );
 }
 

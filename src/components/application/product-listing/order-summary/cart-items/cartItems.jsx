@@ -80,7 +80,7 @@ export default function CartItems(props) {
                         <div className={styles.description_container}>
                           <div className={styles.description_wrapper}>
                             <p
-                              className={styles.prodcut_name}
+                              className={styles.product_name}
                               title={product.descriptor.name}
                             >
                               {product.descriptor.name}

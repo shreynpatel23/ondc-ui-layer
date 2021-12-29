@@ -47,7 +47,7 @@ export default function ProductCard(props) {
       </div>
       <div className={styles.description_container}>
         <div className={styles.description_wrapper}>
-          <p className={styles.prodcut_name} title={descriptor.name}>
+          <p className={styles.product_name} title={descriptor.name}>
             {descriptor.name}
           </p>
         </div>
