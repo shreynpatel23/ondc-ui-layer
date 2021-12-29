@@ -1,10 +1,12 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useContext } from "react";
 import styles from "../application.module.scss";
 import RestaurantCard from "./restaurant-card/restaurantWrapper";
 import { callGetApi } from "../../../api";
 import { useLocation } from "react-router-dom";
 import Toast from "../../shared/toast/toast";
 import no_image_found from "../../../assets/images/no_image_found.png";
+import { CartContext } from "../../../context/cartContext";
+import OrderSummary from "./order-summary/orderSummary";
 
 export default function ProductListing() {
   const uselocation = useLocation();
@@ -15,6 +17,7 @@ export default function ProductListing() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const { cartItems } = useContext(CartContext);
   let timer;
 
   const getProducts = useCallback(async () => {
@@ -91,49 +94,64 @@ export default function ProductListing() {
   );
 
   return (
-    <div className={styles.background}>
-      {error && <Toast message={error} onRemove={() => setError("")} />}
-      {loading ? (
-        loadingSpinner
-      ) : (
-        <div className="p-3">
-          {/* PRODUCTS LIST  */}
-          <div className={`py-2 container`}>
-            {products.length > 0
-              ? products?.map((product, index) => {
-                  return (
-                    <div className="row" key={`${product.bpp_id}-id-${index}`}>
-                      {product.bpp_providers.length > 0
-                        ? product?.bpp_providers.map(
-                            (
-                              { id, descriptor, items, locations },
-                              product_index
-                            ) => {
-                              return (
-                                <div
-                                  key={`${id}-product-id-${product_index}`}
-                                  className="col-12"
-                                >
-                                  <RestaurantCard
-                                    descriptor={descriptor}
-                                    items={items}
-                                    provider_name={product.bpp_descriptor.name}
-                                    bpp_id={product.bpp_id}
-                                    location_id={locations[0].id}
-                                    bpp_provider_id={id}
-                                  />
-                                </div>
-                              );
-                            }
-                          )
-                        : emptyState}
-                    </div>
-                  );
-                })
-              : emptyState}
+    <>
+      <div
+        className={styles.background}
+        style={
+          cartItems.length > 0
+            ? { height: "calc(100vh - 120px)" }
+            : { height: "100%" }
+        }
+      >
+        {error && <Toast message={error} onRemove={() => setError("")} />}
+        {loading ? (
+          loadingSpinner
+        ) : (
+          <div className="p-3">
+            {/* PRODUCTS LIST  */}
+            <div className={`py-2 container`}>
+              {products.length > 0
+                ? products?.map((product, index) => {
+                    return (
+                      <div
+                        className="row"
+                        key={`${product.bpp_id}-id-${index}`}
+                      >
+                        {product.bpp_providers.length > 0
+                          ? product?.bpp_providers.map(
+                              (
+                                { id, descriptor, items, locations },
+                                product_index
+                              ) => {
+                                return (
+                                  <div
+                                    key={`${id}-product-id-${product_index}`}
+                                    className="col-12"
+                                  >
+                                    <RestaurantCard
+                                      descriptor={descriptor}
+                                      items={items}
+                                      provider_name={
+                                        product.bpp_descriptor.name
+                                      }
+                                      bpp_id={product.bpp_id}
+                                      location_id={locations[0].id}
+                                      bpp_provider_id={id}
+                                    />
+                                  </div>
+                                );
+                              }
+                            )
+                          : emptyState}
+                      </div>
+                    );
+                  })
+                : emptyState}
+            </div>
           </div>
-        </div>
-      )}
-    </div>
+        )}
+      </div>
+      {cartItems.length > 0 && <OrderSummary />}
+    </>
   );
 }

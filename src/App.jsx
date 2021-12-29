@@ -11,16 +11,9 @@ function App() {
   return (
     <Router>
       <Navbar />
-      <div
-        className={
-          cartItems.length > 0
-            ? "playground_with_order_summary"
-            : "playground_without_order_summary"
-        }
-      >
+      <div className="playground_without_order_summary">
         <OndcRoutes />
       </div>
-      {cartItems.length > 0 && <OrderSummary />}
     </Router>
   );
 }

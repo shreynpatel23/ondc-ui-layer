@@ -24,12 +24,6 @@ h6 {
   height: calc(100vh - 60px);
   transition: height 0.5s;
 }
-
-.playground_with_order_summary {
-  height: calc(100vh - 120px);
-  transition: height 0.5s;
-}
-
 @media screen and (max-width: 600px) {
   .playground_with_order_summary {
     height: calc(100vh - 180px);
