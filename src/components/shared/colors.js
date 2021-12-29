@@ -4,7 +4,7 @@ export const ONDC_COLORS = {
   PRIMARYCOLOR: "#1e1e1e",
   SECONDARYCOLOR: "#7b7b7b",
   PLACEHOLDERTEXT: "#bcbcbc",
-  ERROR: "#ff7272",
+  ERROR: "#F33636",
   SUCCESS: "#59ff9c",
   WHITE: "#fff",
 };

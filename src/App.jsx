@@ -6,21 +6,20 @@ import { useContext } from "react";
 import OrderSummary from "./components/application/product-listing/order-summary/orderSummary";
 
 function App() {
-  const cartContext = useContext(CartContext);
-  console.log(cartContext);
+  const { cartItems } = useContext(CartContext);
   return (
     <>
       <Navbar />
       <div
         className={
-          cartContext.cartItems.length > 0
+          cartItems.length > 0
             ? "playground_with_order_summary"
             : "playground_without_order_summary"
         }
       >
         <OndcRoutes />
       </div>
-      {cartContext.cartItems.length > 0 && <OrderSummary />}
+      {cartItems.length > 0 && <OrderSummary />}
     </>
   );
 }

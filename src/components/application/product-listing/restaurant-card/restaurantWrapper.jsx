@@ -15,14 +15,13 @@ export default function RestaurantWrapper(props) {
   } = props;
 
   const cartContext = useContext(CartContext);
-
   return (
     <div className="pb-2">
       <div className="px-2 py-1 d-flex align-items-center">
         <div className="pe-2">
           <img
             src={
-              descriptor?.images.length > 0
+              descriptor?.images?.length > 0
                 ? descriptor?.images[0]
                 : no_image_found
             }

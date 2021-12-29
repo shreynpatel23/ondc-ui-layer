@@ -77,6 +77,7 @@ export default function ProductCard(props) {
                         return;
                       }
                     }}
+                    style={{ cursor: "pointer" }}
                   >
                     <SubstractSvg />
                   </div>
@@ -100,6 +101,7 @@ export default function ProductCard(props) {
                         product,
                       });
                     }}
+                    style={{ cursor: "pointer" }}
                   >
                     <AddSvg />
                   </div>
@@ -121,6 +123,7 @@ export default function ProductCard(props) {
                       product,
                     });
                   }}
+                  style={{ cursor: "pointer" }}
                 >
                   <div className="px-1">
                     <ShoppingCart

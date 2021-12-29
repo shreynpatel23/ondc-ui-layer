@@ -32,7 +32,7 @@ export default function OrderSummary() {
           : styles.non_focused_background_color
       }`}
     >
-      {toggleCollapse && <CartItems />}
+      {toggleCollapse && <CartItems onClose={() => setToggleCollapse(false)} />}
       <div className="container h-100">
         <div className="row align-items-center h-100">
           <div className="col-md-8 py-2">
@@ -63,7 +63,7 @@ export default function OrderSummary() {
               </div>
               <div className="px-2">
                 <p className={styles.total_items_in_cart_text}>
-                  Your Order ({cartContext.cartItems.length})
+                  Items in cart ({cartContext.cartItems.length})
                 </p>
               </div>
               <div className="ms-auto">
