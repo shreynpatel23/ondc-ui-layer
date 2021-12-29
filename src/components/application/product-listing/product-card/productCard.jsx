@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import styles from "./productCard.module.scss";
 import no_image_found from "../../../../assets/images/no_image_found.png";
 import RuppeSvg from "../../../shared/svg/ruppe";
@@ -6,6 +6,7 @@ import ShoppingCart from "../../../shared/svg/shopping-cart";
 import { ONDC_COLORS } from "../../../shared/colors";
 import SubstractSvg from "../../../shared/svg/substract";
 import AddSvg from "../../../shared/svg/add";
+import { CartContext } from "../../../../context/cartContext";
 
 export default function ProductCard(props) {
   const {
@@ -17,8 +18,21 @@ export default function ProductCard(props) {
     onRemoveProductFromCart,
   } = props;
   const { id, descriptor, price } = product;
-  const [quantityCount, setQuantityCount] = useState(0);
-  const [toggleAddToCart, setToggleAddToCart] = useState(false);
+  const [quantityCount, setQuantityCount] = useState();
+  const [toggleAddToCart, setToggleAddToCart] = useState();
+  const cartContext = useContext(CartContext);
+  useEffect(() => {
+    const isProductPresent = cartContext.cartItems.find(
+      ({ product }) => product.id === id
+    );
+    if (isProductPresent) {
+      setToggleAddToCart(true);
+      setQuantityCount(isProductPresent.quantity.count);
+    } else {
+      setToggleAddToCart(false);
+      setQuantityCount(0);
+    }
+  }, [cartContext, id]);
   return (
     <div className={`${styles.card_bg} d-flex align-items-start`}>
       <div className={styles.product_img_container}>

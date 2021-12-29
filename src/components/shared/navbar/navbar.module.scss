@@ -2,9 +2,9 @@
 
 .header_back {
   height: 60px;
-  padding: 0 20px;
   background-color: $white;
   box-shadow: 0 3px 10px 0 rgba($primaryColor, 0.15);
+  position: relative;
 }
 
 .marker {

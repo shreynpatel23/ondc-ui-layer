@@ -15,6 +15,7 @@ export default function ProductListing() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  let timer;
 
   const getProducts = useCallback(async () => {
     try {
@@ -22,9 +23,11 @@ export default function ProductListing() {
         `/products/on-search?message_id=${message_id}`
       );
       if (data.message.catalogs <= 0) {
-        getProducts();
+        callApiMultipleTimes();
         return;
       }
+      // this check to clear the interval if we get the success response
+      clearInterval(timer);
       const filteredProducts = data.message.catalogs.map((catalog) => {
         if (catalog?.bpp_providers) {
           return { ...catalog };
@@ -39,11 +42,25 @@ export default function ProductListing() {
       setError(err);
       setLoading(false);
     }
+    // eslint-disable-next-line
   }, [message_id]);
 
   useEffect(() => {
     getProducts();
   }, [getProducts]);
+
+  function callApiMultipleTimes() {
+    let counter = 5;
+    timer = setInterval(async () => {
+      if (counter <= 0) {
+        clearInterval(timer);
+        return;
+      }
+      await getProducts().finally(() => {
+        counter -= 1;
+      });
+    }, 2000);
+  }
 
   const loadingSpinner = (
     <div

@@ -1,16 +1,27 @@
 import "./App.css";
 import OndcRoutes from "./router";
 import Navbar from "./components/shared/navbar/navbar";
-import { CartContextProvider } from "./context/cartContext";
+import { CartContext } from "./context/cartContext";
+import { useContext } from "react";
+import OrderSummary from "./components/application/product-listing/order-summary/orderSummary";
 
 function App() {
+  const cartContext = useContext(CartContext);
+  console.log(cartContext);
   return (
-    <CartContextProvider>
+    <>
       <Navbar />
-      <div className="playground">
+      <div
+        className={
+          cartContext.cartItems.length > 0
+            ? "playground_with_order_summary"
+            : "playground_without_order_summary"
+        }
+      >
         <OndcRoutes />
       </div>
-    </CartContextProvider>
+      {cartContext.cartItems.length > 0 && <OrderSummary />}
+    </>
   );
 }
 

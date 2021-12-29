@@ -1,0 +1,17 @@
+@import "../../../../../assets/scss/variables.scss";
+
+.items_container {
+  position: fixed;
+  bottom: 60px;
+  left: 0;
+  right: 0;
+  background-color: $white;
+  max-height: 300px;
+  overflow: auto;
+}
+
+@media screen and (max-width: 600px) {
+  .items_container {
+    bottom: 120px;
+  }
+}

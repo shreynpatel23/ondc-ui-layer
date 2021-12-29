@@ -17,7 +17,7 @@ export default function RestaurantWrapper(props) {
   const cartContext = useContext(CartContext);
 
   return (
-    <div className="container pb-2">
+    <div className="pb-2">
       <div className="px-2 py-1 d-flex align-items-center">
         <div className="pe-2">
           <img

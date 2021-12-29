@@ -1,0 +1,64 @@
+@import "../../../../assets/scss/variables.scss";
+
+.order_summary_back {
+  box-shadow: 0 -5px 10px 0 rgba($primaryColor, 0.15);
+  height: 60px;
+  width: 100%;
+  transition: all 0.5s;
+  position: relative;
+}
+
+.focused_background_color {
+  background-color: rgba($placeholderText, 0.15);
+  transition: background-color 0.3s;
+}
+
+.non_focused_background_color {
+  background-color: $white;
+  transition: background-color 0.3s;
+}
+
+.collapse_button_wrapper {
+  width: 35px;
+  height: 35px;
+  background-color: $accentColor;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.rotate_up {
+  transition: transform 2s;
+}
+
+.total_items_in_cart_text {
+  font-size: $font-14;
+  font-weight: 500;
+  color: $primaryColor;
+  margin: 0;
+}
+
+.sub_total_text {
+  font-size: $font-18;
+  font-weight: 500;
+  color: $primaryColor;
+  margin: 0;
+}
+
+@media screen and (max-width: 600px) {
+  .order_summary_back {
+    height: 120px;
+  }
+  .collapse_button_wrapper {
+    width: 25px;
+    height: 25px;
+  }
+  .total_items_in_cart_text {
+    font-size: $font-12;
+  }
+  .sub_total_text {
+    font-size: $font-14;
+  }
+}
