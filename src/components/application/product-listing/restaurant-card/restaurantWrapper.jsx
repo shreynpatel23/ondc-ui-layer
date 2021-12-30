@@ -53,41 +53,6 @@ export default function RestaurantWrapper(props) {
                   bpp_id={bpp_id}
                   location_id={location_id}
                   bpp_provider_id={bpp_provider_id}
-                  onAddProductToCart={(value) =>
-                    setCartItems([...cartItems, value])
-                  }
-                  onAddQuantityOfProduct={(value) => {
-                    const productInCart = cartItems.map((item) => {
-                      if (item.id === value.id) {
-                        return {
-                          ...item,
-                          quantity: value.quantity,
-                        };
-                      }
-                      return { ...item };
-                    });
-                    setCartItems(productInCart);
-                  }}
-                  onRemoveProductFromCart={(value) => {
-                    // if the quantity is 0 than we will remove from list
-                    if (value.quantity.count === 0) {
-                      const filteredProducts = cartItems.filter(
-                        (product) => product.id !== value.id
-                      );
-                      setCartItems(filteredProducts);
-                      return;
-                    }
-                    const productInCart = cartItems.map((item) => {
-                      if (item.id === value.id) {
-                        return {
-                          ...item,
-                          quantity: value.quantity,
-                        };
-                      }
-                      return { ...item };
-                    });
-                    setCartItems(productInCart);
-                  }}
                 />
               </div>
             );

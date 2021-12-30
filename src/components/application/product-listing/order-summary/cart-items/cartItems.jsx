@@ -10,36 +10,13 @@ import AddSvg from "../../../../shared/svg/add";
 
 export default function CartItems(props) {
   const { onClose } = props;
-  const { cartItems, setCartItems } = useContext(CartContext);
-  function removeProductFromCart(id) {
-    setCartItems(cartItems.filter((item) => item.id !== id));
-  }
-  function reduceQuantityOfProduct(id) {
-    const updatedProducts = cartItems.map((item) => {
-      if (item.id === id) {
-        return { ...item, quantity: { count: item.quantity.count - 1 } };
-      }
-      return { ...item };
-    });
-    // find the product and check if quantity is now 0
-    const product = updatedProducts.find((item) => item.id === id);
-    // if the quantity is 0 than we will remove from list
-    if (product.quantity.count === 0) {
-      const filteredProducts = cartItems.filter((product) => product.id !== id);
-      setCartItems(filteredProducts);
-      return;
-    }
-    setCartItems(updatedProducts);
-  }
-  function addQuantityOfProduct(id) {
-    const updatedProducts = cartItems.map((item) => {
-      if (item.id === id) {
-        return { ...item, quantity: { count: item.quantity.count + 1 } };
-      }
-      return { ...item };
-    });
-    setCartItems(updatedProducts);
-  }
+  const {
+    cartItems,
+    onRemoveProduct,
+    onReduceQuantity,
+    onAddQuantity,
+  } = useContext(CartContext);
+
   return (
     <div className={styles.items_container}>
       <div className="container">
@@ -101,7 +78,7 @@ export default function CartItems(props) {
                       <div className="d-flex align-items-center">
                         <p
                           className={styles.remove_product_text}
-                          onClick={() => removeProductFromCart(id)}
+                          onClick={() => onRemoveProduct(id)}
                         >
                           remove
                         </p>
@@ -111,7 +88,7 @@ export default function CartItems(props) {
                               <div
                                 className="px-1 flex-fill"
                                 style={{ cursor: "pointer" }}
-                                onClick={() => reduceQuantityOfProduct(id)}
+                                onClick={() => onReduceQuantity(id)}
                               >
                                 <SubstractSvg color={ONDC_COLORS.ACCENTCOLOR} />
                               </div>
@@ -123,7 +100,7 @@ export default function CartItems(props) {
                               <div
                                 className="px-1 flex-fill"
                                 style={{ cursor: "pointer" }}
-                                onClick={() => addQuantityOfProduct(id)}
+                                onClick={() => onAddQuantity(id)}
                               >
                                 <AddSvg color={ONDC_COLORS.ACCENTCOLOR} />
                               </div>

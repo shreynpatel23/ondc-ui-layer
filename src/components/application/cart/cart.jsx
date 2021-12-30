@@ -13,7 +13,12 @@ import { buttonTypes, buttonSize } from "../../../utils/button";
 
 export default function Cart() {
   const history = useHistory();
-  const { cartItems, setCartItems } = useContext(CartContext);
+  const {
+    cartItems,
+    onRemoveProduct,
+    onReduceQuantity,
+    onAddQuantity,
+  } = useContext(CartContext);
 
   const emptyState = (
     <div className="col-12">
@@ -42,35 +47,6 @@ export default function Cart() {
     </div>
   );
 
-  function removeProductFromCart(id) {
-    setCartItems(cartItems.filter((item) => item.id !== id));
-  }
-  function reduceQuantityOfProduct(id) {
-    const updatedProducts = cartItems.map((item) => {
-      if (item.id === id) {
-        return { ...item, quantity: { count: item.quantity.count - 1 } };
-      }
-      return { ...item };
-    });
-    // find the product and check if quantity is now 0
-    const product = updatedProducts.find((item) => item.id === id);
-    // if the quantity is 0 than we will remove from list
-    if (product.quantity.count === 0) {
-      const filteredProducts = cartItems.filter((product) => product.id !== id);
-      setCartItems(filteredProducts);
-      return;
-    }
-    setCartItems(updatedProducts);
-  }
-  function addQuantityOfProduct(id) {
-    const updatedProducts = cartItems.map((item) => {
-      if (item.id === id) {
-        return { ...item, quantity: { count: item.quantity.count + 1 } };
-      }
-      return { ...item };
-    });
-    setCartItems(updatedProducts);
-  }
   return (
     <div className={styles.background}>
       <div className="container py-4">
@@ -130,7 +106,7 @@ export default function Cart() {
                         <div className="d-flex align-items-center">
                           <p
                             className={cartStyles.remove_product_text}
-                            onClick={() => removeProductFromCart(id)}
+                            onClick={() => onRemoveProduct(id)}
                           >
                             remove
                           </p>
@@ -142,7 +118,7 @@ export default function Cart() {
                                 <div
                                   className="px-1 flex-fill"
                                   style={{ cursor: "pointer" }}
-                                  onClick={() => reduceQuantityOfProduct(id)}
+                                  onClick={() => onReduceQuantity(id)}
                                 >
                                   <SubstractSvg
                                     color={ONDC_COLORS.ACCENTCOLOR}
@@ -160,7 +136,7 @@ export default function Cart() {
                                 <div
                                   className="px-1 flex-fill"
                                   style={{ cursor: "pointer" }}
-                                  onClick={() => addQuantityOfProduct(id)}
+                                  onClick={() => onAddQuantity(id)}
                                 >
                                   <AddSvg color={ONDC_COLORS.ACCENTCOLOR} />
                                 </div>

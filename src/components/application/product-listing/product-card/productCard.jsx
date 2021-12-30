@@ -9,19 +9,16 @@ import AddSvg from "../../../shared/svg/add";
 import { CartContext } from "../../../../context/cartContext";
 
 export default function ProductCard(props) {
-  const {
-    product,
-    bpp_id,
-    location_id,
-    bpp_provider_id,
-    onAddProductToCart,
-    onRemoveProductFromCart,
-    onAddQuantityOfProduct,
-  } = props;
+  const { product, bpp_id, location_id, bpp_provider_id } = props;
   const { id, descriptor, price } = product;
   const [quantityCount, setQuantityCount] = useState();
   const [toggleAddToCart, setToggleAddToCart] = useState();
-  const { cartItems } = useContext(CartContext);
+  const {
+    cartItems,
+    onAddQuantity,
+    onReduceQuantity,
+    onAddProduct,
+  } = useContext(CartContext);
   useEffect(() => {
     const isProductPresent = cartItems.find(({ product }) => product.id === id);
     if (isProductPresent) {
@@ -67,10 +64,7 @@ export default function ProductCard(props) {
                     className="px-1 flex-fill"
                     onClick={() => {
                       setQuantityCount(quantityCount - 1);
-                      onRemoveProductFromCart({
-                        id,
-                        quantity: { count: quantityCount - 1 },
-                      });
+                      onReduceQuantity(id);
                       if (quantityCount - 1 === 0) {
                         setToggleAddToCart(false);
                         return;
@@ -89,10 +83,7 @@ export default function ProductCard(props) {
                     className="px-1 flex-fill"
                     onClick={() => {
                       setQuantityCount(quantityCount + 1);
-                      onAddQuantityOfProduct({
-                        id,
-                        quantity: { count: quantityCount + 1 },
-                      });
+                      onAddQuantity(id);
                     }}
                     style={{ cursor: "pointer" }}
                   >
@@ -105,7 +96,7 @@ export default function ProductCard(props) {
                   onClick={() => {
                     setToggleAddToCart(true);
                     setQuantityCount(quantityCount + 1);
-                    onAddProductToCart({
+                    onAddProduct({
                       id,
                       quantity: { count: quantityCount + 1 },
                       bpp_id,
