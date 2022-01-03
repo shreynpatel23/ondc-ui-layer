@@ -47,8 +47,173 @@
   width: 50%;
 }
 
+.back_text {
+  font-size: $font-12;
+  color: $secondaryColor;
+  padding: 0 5px;
+  margin: 0;
+}
+
+.empty_state_header_text {
+  font-size: $font-18;
+  font-weight: $medium;
+  color: $primaryColor;
+  text-align: center;
+  margin: 0;
+}
+
+.empty_state_body_text {
+  font-size: $font-14;
+  color: $secondaryColor;
+  width: 400px;
+  margin: 0;
+  text-align: center;
+  padding: 10px 0;
+}
+
+.cart_card {
+  width: 100%;
+  background: $white;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.15);
+}
+
+.cart_card_spacing {
+  padding: 15px 20px;
+}
+
+.cart_card_header {
+  font-size: $font-18;
+  font-weight: $medium;
+  color: $primaryColor;
+  margin: 0;
+}
+
+.add_location_button_wrapper {
+  padding: 10px 15px;
+  border-radius: 8px;
+  border: 1px solid $accentColor;
+  cursor: pointer;
+}
+
+.add_location_text {
+  font-size: $font-14;
+  font-weight: $medium;
+  color: $accentColor;
+  margin: 0;
+}
+
+.address_wrapper_card {
+  min-width: 400px;
+  padding: 10px 15px;
+  border-radius: 8px;
+  border: 1px solid $secondaryColor;
+}
+
+.person_name,
+.street_name {
+  font-size: $font-16;
+  color: $primaryColor;
+  margin: 0;
+}
+
+.person_email,
+.country_code,
+.state,
+.city {
+  font-size: $font-12;
+  margin: 0;
+  color: $secondaryColor;
+}
+
+/* The container */
+.container {
+  display: block;
+  position: relative;
+  padding-left: 30px;
+  cursor: pointer;
+  font-size: $font-14;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default radio button */
+.container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* Create a custom radio button */
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  background-color: rgba($secondaryColor, 0.2);
+  border-radius: 50%;
+}
+
+/* On mouse-over, add a grey background color */
+.container:hover input ~ .checkmark {
+  background-color: rgba($secondaryColor, 0.2);
+}
+
+/* When the radio button is checked, add a blue background */
+.container input:checked ~ .checkmark {
+  background-color: $accentColor;
+}
+
+/* Create the indicator (the dot/circle - hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the indicator (dot/circle) when checked */
+.container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the indicator (dot/circle) */
+.container .checkmark:after {
+  top: 6px;
+  left: 6px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: $white;
+}
+
+.sub_total_text {
+  font-size: $font-18;
+  font-weight: 500;
+  color: $primaryColor;
+  margin: 0;
+}
+
+.checkout_button_wrapper {
+  width: 100%;
+  border-radius: 5px;
+  background-color: $accentColor;
+  border: 0;
+  height: 40px;
+  box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $white;
+}
+
 @media screen and (max-width: 786px) {
   .search_wrapper {
+    width: 100%;
+  }
+  .address_wrapper_card {
     width: 100%;
   }
 }

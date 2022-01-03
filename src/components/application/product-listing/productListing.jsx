@@ -2,17 +2,13 @@ import React, { useState, useEffect, useCallback, useContext } from "react";
 import styles from "../application.module.scss";
 import RestaurantCard from "./restaurant-card/restaurantWrapper";
 import { callGetApi } from "../../../api";
-import { useLocation } from "react-router-dom";
 import Toast from "../../shared/toast/toast";
-import no_image_found from "../../../assets/images/no_image_found.png";
+import empty_state from "../../../assets/images/empty_state.svg";
 import { CartContext } from "../../../context/cartContext";
 import OrderSummary from "./order-summary/orderSummary";
 
 export default function ProductListing() {
-  const uselocation = useLocation();
-  const {
-    state: { message_id },
-  } = uselocation;
+  const message_id = localStorage.getItem("message_id") || "";
   //states
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -56,7 +52,7 @@ export default function ProductListing() {
   }, [getProducts]);
 
   function callApiMultipleTimes() {
-    let counter = 5;
+    let counter = 3;
     timer = setInterval(async () => {
       if (counter <= 0) {
         clearInterval(timer);
@@ -84,11 +80,18 @@ export default function ProductListing() {
   const emptyState = (
     <div
       className="d-flex align-items-center justify-content-center"
-      style={{ height: "50vh" }}
+      style={{ height: "80vh" }}
     >
       <div className="text-center">
-        <img src={no_image_found} alt="no_image_found" widht="250px" />
-        <h3 className="py-2">No Items found</h3>
+        <img src={empty_state} alt="empty_state" widht="250px" />
+        <div className="py-3">
+          <p className={styles.empty_state_header_text}>
+            The product you are looking for is not found
+          </p>
+          <p className={styles.empty_state_body_text}>
+            Try searching for a different product.
+          </p>
+        </div>
       </div>
     </div>
   );

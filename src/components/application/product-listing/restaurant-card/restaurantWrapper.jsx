@@ -1,8 +1,7 @@
-import React, { useContext } from "react";
+import React from "react";
 import styles from "./restaurantWrapper.module.scss";
 import ProductCard from "../product-card/productCard";
 import no_image_found from "../../../../assets/images/no_image_found.png";
-import { CartContext } from "../../../../context/cartContext";
 
 export default function RestaurantWrapper(props) {
   const {
@@ -14,7 +13,6 @@ export default function RestaurantWrapper(props) {
     bpp_provider_id,
   } = props;
 
-  const { cartItems, setCartItems } = useContext(CartContext);
   return (
     <div className="pb-2">
       <div className="px-2 py-1 d-flex align-items-center">

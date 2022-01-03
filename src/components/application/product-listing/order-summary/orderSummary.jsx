@@ -7,8 +7,10 @@ import RuppeSvg from "../../../shared/svg/ruppe";
 import Button from "../../../shared/button/button";
 import { buttonTypes, buttonSize } from "../../../../utils/button";
 import CartItems from "./cart-items/cartItems";
+import { useHistory } from "react-router-dom";
 
 export default function OrderSummary() {
+  const history = useHistory();
   const { cartItems, setCartItems } = useContext(CartContext);
   const [toggleCollapse, setToggleCollapse] = useState(false);
 
@@ -85,7 +87,6 @@ export default function OrderSummary() {
             <div className="px-2">
               <Button
                 button_text="Clear Cart"
-                // disabled={loading}
                 type={buttonTypes.secondary}
                 size={buttonSize.small}
                 onClick={() => setCartItems([])}
@@ -93,11 +94,11 @@ export default function OrderSummary() {
             </div>
             <div className="px-2">
               <Button
-                button_text="Checkout"
+                button_text="View Cart"
                 type={buttonTypes.primary}
                 size={buttonSize.small}
-                onClick={() => console.log("Checking you out")}
-              ></Button>
+                onClick={() => history.push("/cart")}
+              />
             </div>
           </div>
         </div>

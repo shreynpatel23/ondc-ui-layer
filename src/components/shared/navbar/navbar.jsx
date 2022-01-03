@@ -5,6 +5,7 @@ import MoreInfo from "../svg/more-info";
 import UserAvatar from "../svg/user-avatar";
 import { CartContext } from "../../../context/cartContext";
 import { useHistory } from "react-router-dom";
+import logo from "../../../assets/images/logo.png";
 
 export default function Navbar() {
   const { cartItems } = useContext(CartContext);
@@ -13,7 +14,13 @@ export default function Navbar() {
     <div className={styles.header_back}>
       <div className="container">
         <div className="d-flex align-items-center">
-          <p className="m-0">Logo</p>
+          <img
+            src={logo}
+            alt="logo"
+            height="40px"
+            style={{ cursor: "pointer" }}
+            onClick={() => history.push("/")}
+          />
           <div className="ms-auto d-flex align-items-center">
             <div className="p-3">
               <div

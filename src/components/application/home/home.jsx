@@ -33,10 +33,9 @@ export default function Home() {
       });
       const { context } = data;
       localStorage.setItem("transaction_id", context.transaction_id);
+      localStorage.setItem("message_id", context.message_id);
       setLoading(false);
-      history.push("/products", {
-        message_id: context.message_id,
-      });
+      history.push("/products");
     } catch (error) {
       const { err } = error.response.data;
       setError(err);
