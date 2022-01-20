@@ -27,9 +27,14 @@ export default function Home() {
   async function handleSearchProduct() {
     setLoading(true);
     try {
-      const { data } = await callPostApi("/products/get-products", {
-        search_value: searchValue,
-        location: "12.903561,77.5939631",
+      const data = await callPostApi("/client/v1/search", {
+        context: {},
+        message: {
+          criteria: {
+            search_string: searchValue,
+            delivery_location: "12.903561,77.5939631",
+          },
+        },
       });
       const { context } = data;
       localStorage.setItem("transaction_id", context.transaction_id);

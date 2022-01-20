@@ -18,15 +18,9 @@ export default function ProductListing() {
 
   const getProducts = useCallback(async () => {
     try {
-      const { data } = await callGetApi(
-        `/products/on-search?message_id=${message_id}`
+      const data = await callGetApi(
+        `/client/v1/on_search?messageId=${message_id}`
       );
-      if (data.message.catalogs <= 0) {
-        callApiMultipleTimes();
-        return;
-      }
-      // this check to clear the interval if we get the success response
-      // clearInterval(timer);
       const filteredProducts = data.message.catalogs.map((catalog) => {
         if (catalog?.bpp_providers) {
           return { ...catalog };
@@ -45,14 +39,15 @@ export default function ProductListing() {
   }, [message_id]);
 
   useEffect(() => {
-    getProducts();
+    callApiMultipleTimes();
     return () => {
       setLoading(false);
     };
-  }, [getProducts]);
+    // eslint-disable-next-line
+  }, []);
 
   function callApiMultipleTimes() {
-    let counter = 3;
+    let counter = 6;
     timer = setInterval(async () => {
       if (counter <= 0) {
         clearInterval(timer);
