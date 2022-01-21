@@ -5,7 +5,7 @@ import { steps_to_checkout } from "../../../../constants/steps-to-checkout";
 import { ONDC_COLORS } from "../../../shared/colors";
 
 export default function PaymentTypesCard(props) {
-  const { currentStep } = props;
+  const { currentStep, setCurrentStep } = props;
   return (
     <div className={styles.cart_card}>
       <div className={`d-flex align-items-center ${styles.cart_card_spacing}`}>
@@ -33,7 +33,13 @@ export default function PaymentTypesCard(props) {
           <div className="py-2">
             <label className={styles.container}>
               Cash on dilevery
-              <input type="radio" name="cash_on_dilevery" />
+              <input
+                type="radio"
+                name="cash_on_dilevery"
+                onChange={() => {
+                  setCurrentStep([...currentStep, steps_to_checkout.CHECKOUT]);
+                }}
+              />
               <span className={styles.checkmark}></span>
             </label>
           </div>

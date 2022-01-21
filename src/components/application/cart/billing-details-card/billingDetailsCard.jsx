@@ -9,20 +9,15 @@ import { ONDC_COLORS } from "../../../shared/colors";
 import AddAddressModal from "../add-address-modal/addAddressModal";
 
 export default function BillingDetailsCard(props) {
-  const {
-    currentStep,
-    shippingAddress,
-    setBillingAddress,
-    billingAddress,
-    setCurrentStep,
-  } = props;
+  const { currentStep, setCurrentStep } = props;
+  const shippingAddress = JSON.parse(localStorage.getItem("shipping_address"));
+  const [billingAddress, setBillingAddress] = useState();
   const [toggleSameAsBillingAddress, setToggleSameAsBillingAddress] = useState(
     false
   );
   const [toggleBillingAddressModal, setToggleBillingAddressModal] = useState(
     false
   );
-
   return (
     <div className={styles.cart_card}>
       {toggleBillingAddressModal && (

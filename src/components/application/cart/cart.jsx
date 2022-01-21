@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, useCallback } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import styles from "../application.module.scss";
 import cartStyles from "../product-listing/order-summary/cart-items/cartItems.module.scss";
 import empty_state from "../../../assets/images/empty_state.svg";
@@ -21,7 +21,6 @@ export default function Cart() {
   const history = useHistory();
   const transaction_id = localStorage.getItem("transaction_id") || "";
   // const token = localStorage.getItem("token") || "";
-  let timer;
   const { cartItems, onReduceQuantity, onAddQuantity } = useContext(
     CartContext
   );
@@ -29,20 +28,6 @@ export default function Cart() {
   const [currentStep, setCurrentStep] = useState([
     steps_to_checkout.ADD_SHIPPING_DETAILS,
   ]);
-  const [shippingAddress, setShippingAddress] = useState();
-  const [billingAddress, setBillingAddress] = useState();
-  const [toggleShippingAddressModal, setToggleShippingAddressModal] = useState(
-    false
-  );
-
-  const onGetQuote = useCallback(async () => {
-    try {
-      await callGetApi(`/client/v1/on_get_quote?messageId=${messageId}`);
-    } catch (err) {
-      console.log(err);
-    }
-    // eslint-disable-next-line
-  }, [messageId]);
 
   useEffect(() => {
     async function getQuote() {
@@ -69,23 +54,23 @@ export default function Cart() {
   }, [cartItems, transaction_id]);
 
   useEffect(() => {
+    async function onGetQuote() {
+      try {
+        await callGetApi(`/client/v1/on_get_quote?messageId=${messageId}`);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
     if (messageId) {
-      callApiMultipleTimes();
+      onGetQuote();
     }
     // eslint-disable-next-line
   }, [messageId]);
 
-  function callApiMultipleTimes() {
-    let counter = 2;
-    timer = setInterval(async () => {
-      if (counter <= 0) {
-        clearInterval(timer);
-        return;
-      }
-      await onGetQuote().finally(() => {
-        counter -= 1;
-      });
-    }, 2000);
+  // api here for checkout cart
+  async function handleCheckout() {
+    console.log("checking out now");
   }
 
   function getSubTotal() {
@@ -129,19 +114,6 @@ export default function Cart() {
 
   return (
     <div className={styles.background}>
-      {toggleShippingAddressModal && (
-        <AddAddressModal
-          onClose={() => setToggleShippingAddressModal(false)}
-          onAddAddress={(value) => {
-            setShippingAddress(value);
-            setToggleShippingAddressModal(false);
-            setCurrentStep([
-              ...currentStep,
-              steps_to_checkout.ADD_BILLING_DETAILS,
-            ]);
-          }}
-        />
-      )}
       {cartItems.length > 0 ? (
         <div className="container py-4">
           <div className="row">
@@ -170,26 +142,22 @@ export default function Cart() {
                 <div className="col-12 pb-3">
                   <ShippingDetailsCard
                     currentStep={currentStep}
-                    shippingAddress={shippingAddress}
-                    setShippingAddress={(value) => setShippingAddress(value)}
-                    setToggleShippingAddressModal={(value) =>
-                      setToggleShippingAddressModal(value)
-                    }
+                    setCurrentStep={(value) => setCurrentStep(value)}
                   />
                 </div>
                 {/* BILLING DETAILS  */}
                 <div className="col-12 py-3">
                   <BillingDetailsCard
                     currentStep={currentStep}
-                    shippingAddress={shippingAddress}
-                    billingAddress={billingAddress}
-                    setBillingAddress={(value) => setBillingAddress(value)}
                     setCurrentStep={(value) => setCurrentStep(value)}
                   />
                 </div>
                 {/* PAYMENT DETAILS  */}
                 <div className="col-12 py-3">
-                  <PaymentTypesCard currentStep={currentStep} />
+                  <PaymentTypesCard
+                    currentStep={currentStep}
+                    setCurrentStep={(value) => setCurrentStep(value)}
+                  />
                 </div>
               </div>
             </div>
@@ -282,9 +250,15 @@ export default function Cart() {
                     </div>
                   </div>
                   <div className="py-3">
-                    <button className={styles.checkout_button_wrapper}>
-                      Checkout
-                    </button>
+                    <Button
+                      button_text="Checkout"
+                      type={buttonTypes.primary}
+                      size={buttonSize.small}
+                      disabled={
+                        !currentStep.includes(steps_to_checkout.CHECKOUT)
+                      }
+                      onClick={handleCheckout}
+                    />
                   </div>
                 </div>
               </div>

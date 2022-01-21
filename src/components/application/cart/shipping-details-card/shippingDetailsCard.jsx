@@ -1,20 +1,35 @@
-import React from "react";
+import React, { useState } from "react";
 import LocationSvg from "../../../shared/svg/location";
 import CrossSvg from "../../../shared/svg/cross";
 import ArrowDown from "../../../shared/svg/arrow-down";
 import styles from "../../application.module.scss";
 import { steps_to_checkout } from "../../../../constants/steps-to-checkout";
 import { ONDC_COLORS } from "../../../shared/colors";
+import AddAddressModal from "../add-address-modal/addAddressModal";
 
 export default function ShippingDetailsCard(props) {
-  const {
-    currentStep,
-    shippingAddress,
-    setShippingAddress,
-    setToggleShippingAddressModal,
-  } = props;
+  const { currentStep, setCurrentStep } = props;
+  const [shippingAddress, setShippingAddress] = useState();
+  const [toggleShippingAddressModal, setToggleShippingAddressModal] = useState(
+    false
+  );
+
   return (
     <div className={styles.cart_card}>
+      {toggleShippingAddressModal && (
+        <AddAddressModal
+          onClose={() => setToggleShippingAddressModal(false)}
+          onAddAddress={(value) => {
+            localStorage.setItem("shipping_address", JSON.stringify(value));
+            setShippingAddress(value);
+            setToggleShippingAddressModal(false);
+            setCurrentStep([
+              ...currentStep,
+              steps_to_checkout.ADD_BILLING_DETAILS,
+            ]);
+          }}
+        />
+      )}
       {/* HEADER  */}
       <div className={`d-flex align-items-center ${styles.cart_card_spacing}`}>
         <p className={styles.cart_card_header}>Shipping Details</p>
