@@ -11,7 +11,9 @@ export default function Button(props) {
       {...props}
       style={{
         ...buttonStyle,
-        width:
+        width: "100%",
+        padding: "5px 10px",
+        minWidth:
           props.size === buttonSize.large
             ? "300px"
             : props.size === buttonSize.medium

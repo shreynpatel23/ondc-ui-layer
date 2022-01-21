@@ -115,32 +115,28 @@ export default function ProductListing() {
                         className="row"
                         key={`${product.bpp_id}-id-${index}`}
                       >
-                        {product.bpp_providers.length > 0
-                          ? product?.bpp_providers.map(
-                              (
-                                { id, descriptor, items, locations },
-                                product_index
-                              ) => {
-                                return (
-                                  <div
-                                    key={`${id}-product-id-${product_index}`}
-                                    className="col-12"
-                                  >
-                                    <RestaurantCard
-                                      descriptor={descriptor}
-                                      items={items}
-                                      provider_name={
-                                        product.bpp_descriptor.name
-                                      }
-                                      bpp_id={product.bpp_id}
-                                      location_id={locations[0].id}
-                                      bpp_provider_id={id}
-                                    />
-                                  </div>
-                                );
-                              }
-                            )
-                          : emptyState}
+                        {product?.bpp_providers.map(
+                          (
+                            { id, descriptor, items, locations },
+                            product_index
+                          ) => {
+                            return (
+                              <div
+                                key={`${id}-product-id-${product_index}`}
+                                className="col-12"
+                              >
+                                <RestaurantCard
+                                  descriptor={descriptor}
+                                  items={items}
+                                  provider_name={product.bpp_descriptor.name}
+                                  bpp_id={product.bpp_id}
+                                  location_id={locations[0].id}
+                                  bpp_provider_id={id}
+                                />
+                              </div>
+                            );
+                          }
+                        )}
                       </div>
                     );
                   })

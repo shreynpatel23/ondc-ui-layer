@@ -27,3 +27,17 @@
   align-items: center;
   justify-content: center;
 }
+
+.user_name {
+  margin: 0;
+  font-size: $font-20;
+  color: $primaryColor;
+  text-align: left;
+}
+
+.user_email {
+  margin: 0;
+  font-size: $font-14;
+  color: $primaryColor;
+  text-align: left;
+}
