@@ -5,7 +5,7 @@ import { buttonTypes, buttonSize } from "../../utils/button";
 import styles from "../application/application.module.scss";
 import Toast from "../shared/toast/toast";
 import { useHistory } from "react-router-dom";
-import { callPostApi } from "../../api";
+// import { callPostApi } from "../../api";
 
 export default function Login() {
   const auth = getAuth();

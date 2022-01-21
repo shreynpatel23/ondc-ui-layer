@@ -33,8 +33,12 @@ export default function ProductCard(props) {
     <div className={`${styles.card_bg} d-flex align-items-start`}>
       <div className={styles.product_img_container}>
         <img
-          src={descriptor.images[0] ?? no_image_found}
-          alt={descriptor.name}
+          src={
+            descriptor?.images?.length > 0
+              ? descriptor?.images[0]
+              : no_image_found
+          }
+          alt={descriptor?.name}
           className={styles.product_img}
           onError={(event) => {
             event.target.onerror = null;

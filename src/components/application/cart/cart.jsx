@@ -1,9 +1,8 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect, useCallback } from "react";
 import styles from "../application.module.scss";
 import cartStyles from "../product-listing/order-summary/cart-items/cartItems.module.scss";
 import empty_state from "../../../assets/images/empty_state.svg";
 import RuppeSvg from "../../shared/svg/ruppe";
-import LocationSvg from "../../shared/svg/location";
 import SubstractSvg from "../../shared/svg/substract";
 import AddSvg from "../../shared/svg/add";
 import { CartContext } from "../../../context/cartContext";
@@ -17,11 +16,16 @@ import ShippingDetailsCard from "./shipping-details-card/shippingDetailsCard";
 import { steps_to_checkout } from "../../../constants/steps-to-checkout";
 import BillingDetailsCard from "./billing-details-card/billingDetailsCard";
 import PaymentTypesCard from "./payment-types-card/paymentTypesCard";
+import { callPostApi, callGetApi } from "../../../api";
 export default function Cart() {
   const history = useHistory();
+  const transaction_id = localStorage.getItem("transaction_id") || "";
+  // const token = localStorage.getItem("token") || "";
+  let timer;
   const { cartItems, onReduceQuantity, onAddQuantity } = useContext(
     CartContext
   );
+  const [messageId, setMessageId] = useState("");
   const [currentStep, setCurrentStep] = useState([
     steps_to_checkout.ADD_SHIPPING_DETAILS,
   ]);
@@ -30,6 +34,59 @@ export default function Cart() {
   const [toggleShippingAddressModal, setToggleShippingAddressModal] = useState(
     false
   );
+
+  const onGetQuote = useCallback(async () => {
+    try {
+      await callGetApi(`/client/v1/on_get_quote?messageId=${messageId}`);
+    } catch (err) {
+      console.log(err);
+    }
+    // eslint-disable-next-line
+  }, [messageId]);
+
+  useEffect(() => {
+    async function getQuote() {
+      try {
+        const { context } = await callPostApi("/client/v1/get_quote", {
+          context: {
+            transaction_id: transaction_id,
+          },
+          message: {
+            cart: {
+              items: cartItems,
+            },
+          },
+        });
+        const { message_id } = context;
+        setMessageId(message_id);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    if (cartItems.length > 0) {
+      getQuote();
+    }
+  }, [cartItems, transaction_id]);
+
+  useEffect(() => {
+    if (messageId) {
+      callApiMultipleTimes();
+    }
+    // eslint-disable-next-line
+  }, [messageId]);
+
+  function callApiMultipleTimes() {
+    let counter = 2;
+    timer = setInterval(async () => {
+      if (counter <= 0) {
+        clearInterval(timer);
+        return;
+      }
+      await onGetQuote().finally(() => {
+        counter -= 1;
+      });
+    }, 2000);
+  }
 
   function getSubTotal() {
     let sum = 0;

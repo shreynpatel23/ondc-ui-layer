@@ -1,6 +1,4 @@
 import React from "react";
-import LocationSvg from "../../../shared/svg/location";
-import CrossSvg from "../../../shared/svg/cross";
 import ArrowDown from "../../../shared/svg/arrow-down";
 import styles from "../../application.module.scss";
 import { steps_to_checkout } from "../../../../constants/steps-to-checkout";
