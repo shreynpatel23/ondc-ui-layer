@@ -37,15 +37,24 @@ export default function LocationInput(props) {
           dropdownType={dropdownType}
         >
           <div className="d-flex align-items-center">
-            <div className="px-1">
+            <div className="px-2">
               <LocationSvg width="15" />
             </div>
             <div className="px-1">
-              <p className={styles.location}>
-                {selectedLocation ? selectedLocation : "Select Location"}
-              </p>
+              {selectedLocation ? (
+                <div>
+                  <p className={styles.location_name}>
+                    {selectedLocation.name}
+                  </p>
+                  <p className={styles.location_description}>
+                    {selectedLocation.description}
+                  </p>
+                </div>
+              ) : (
+                <p className={styles.location}>Select Location</p>
+              )}
             </div>
-            <div className="px-1">
+            <div className="px-2">
               {selectedLocation ? (
                 <CrossSvg
                   width="10"

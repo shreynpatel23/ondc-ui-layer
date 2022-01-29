@@ -28,6 +28,9 @@ export default function Cart() {
   const [currentStep, setCurrentStep] = useState([
     steps_to_checkout.ADD_SHIPPING_DETAILS,
   ]);
+  const [shippingAddress, setShippingAddress] = useState();
+  const [billingAddress, setBillingAddress] = useState();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     async function getQuote() {
@@ -67,6 +70,29 @@ export default function Cart() {
     }
     // eslint-disable-next-line
   }, [messageId]);
+
+  // use this api to initialize the order
+  async function initializeOrder() {
+    setLoading(true);
+    try {
+      const data = await callPostApi("/client/v1/initialize_order", {
+        context: {
+          transaction_id,
+        },
+        message: {
+          items: cartItems,
+          billing_info: billingAddress,
+          delivery_info: shippingAddress,
+        },
+      });
+      setCurrentStep([...currentStep, steps_to_checkout.SELECT_PAYMENT_METHOD]);
+      console.log(data);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   // api here for checkout cart
   async function handleCheckout() {
@@ -111,10 +137,24 @@ export default function Cart() {
       </div>
     </div>
   );
+  const loadingSpinner = (
+    <div
+      className="d-flex align-items-center justify-content-center"
+      style={{ height: "50vh" }}
+    >
+      <div
+        className="spinner-border spinner-border-lg"
+        role="status"
+        aria-hidden="true"
+      ></div>
+    </div>
+  );
 
   return (
     <div className={styles.background}>
-      {cartItems.length > 0 ? (
+      {loading ? (
+        loadingSpinner
+      ) : cartItems.length > 0 ? (
         <div className="container py-4">
           <div className="row">
             <div className="col-12">
@@ -143,13 +183,17 @@ export default function Cart() {
                   <ShippingDetailsCard
                     currentStep={currentStep}
                     setCurrentStep={(value) => setCurrentStep(value)}
+                    shippingAddress={shippingAddress}
+                    setShippingAddress={(value) => setShippingAddress(value)}
                   />
                 </div>
                 {/* BILLING DETAILS  */}
                 <div className="col-12 py-3">
                   <BillingDetailsCard
                     currentStep={currentStep}
-                    setCurrentStep={(value) => setCurrentStep(value)}
+                    billingAddress={billingAddress}
+                    setBillingAddress={(value) => setBillingAddress(value)}
+                    onInitializeOrder={() => initializeOrder()}
                   />
                 </div>
                 {/* PAYMENT DETAILS  */}

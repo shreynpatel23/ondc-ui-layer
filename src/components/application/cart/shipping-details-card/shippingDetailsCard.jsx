@@ -8,8 +8,12 @@ import { ONDC_COLORS } from "../../../shared/colors";
 import AddAddressModal from "../add-address-modal/addAddressModal";
 
 export default function ShippingDetailsCard(props) {
-  const { currentStep, setCurrentStep } = props;
-  const [shippingAddress, setShippingAddress] = useState();
+  const {
+    currentStep,
+    setCurrentStep,
+    shippingAddress,
+    setShippingAddress,
+  } = props;
   const [toggleShippingAddressModal, setToggleShippingAddressModal] = useState(
     false
   );
@@ -20,8 +24,28 @@ export default function ShippingDetailsCard(props) {
         <AddAddressModal
           onClose={() => setToggleShippingAddressModal(false)}
           onAddAddress={(value) => {
-            localStorage.setItem("shipping_address", JSON.stringify(value));
-            setShippingAddress(value);
+            const delivery_address = {
+              name: value.name,
+              email: value.email,
+              phone: value.phoneNumber,
+              type: "home_delivery",
+              location: {
+                address: {
+                  area_code: value.pinCode,
+                  building: value.building,
+                  city: value.city,
+                  country: "IND",
+                  door: value.landmark,
+                  state: value.state,
+                  street: value.street,
+                },
+              },
+            };
+            localStorage.setItem(
+              "shipping_address",
+              JSON.stringify(delivery_address)
+            );
+            setShippingAddress(delivery_address);
             setToggleShippingAddressModal(false);
             setCurrentStep([
               ...currentStep,
@@ -66,27 +90,29 @@ export default function ShippingDetailsCard(props) {
                   </p>
                   <div className="py-2">
                     <p className={styles.street_name}>
-                      {shippingAddress?.street}
+                      {shippingAddress?.location?.address?.street}
                     </p>
                     <div className="d-flex align-items-center">
                       <div className="pe-1">
-                        <p className={styles.city}>{shippingAddress?.city},</p>
+                        <p className={styles.city}>
+                          {shippingAddress?.location?.address?.city},
+                        </p>
                       </div>
                       <div className="pe-1">
                         <p className={styles.state}>
-                          {shippingAddress?.state},
+                          {shippingAddress?.location?.address?.state},
                         </p>
                       </div>
                       <div className="pe-1">
                         <p className={styles.country_code}>
-                          {shippingAddress?.pinCode}
+                          {shippingAddress?.location?.address?.area_code}
                         </p>
                       </div>
                     </div>
                   </div>
                   <div className="pt-2">
                     <p className={styles.person_name}>
-                      {shippingAddress?.phoneNumber}
+                      {shippingAddress?.phone}
                     </p>
                   </div>
                 </div>

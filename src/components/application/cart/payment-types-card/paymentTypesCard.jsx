@@ -32,7 +32,7 @@ export default function PaymentTypesCard(props) {
         <div className={styles.cart_card_spacing}>
           <div className="py-2">
             <label className={styles.container}>
-              Cash on dilevery
+              Cash on delivery
               <input
                 type="radio"
                 name="cash_on_dilevery"

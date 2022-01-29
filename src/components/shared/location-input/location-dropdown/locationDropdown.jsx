@@ -1,20 +1,80 @@
 import React, { useState } from "react";
+import locationStyles from "../locationInput.module.scss";
 import styles from "../../dropdown/dropdown.module.scss";
 import inputStyles from "../locationInput.module.scss";
 import SearchSvg from "../../svg/search";
 import { ONDC_COLORS } from "../../colors";
+import { callGetApi } from "../../../../api";
+import { debounce } from "../../../../utils/search";
 
 export default function LocationDropdown(props) {
   const { id, children, click, dropdownType } = props;
-  const [locations] = useState(["Pune", "Banglore", "Chennai"]);
-  const [searchedLocation, setSearchedLocation] = useState("");
-
-  //   filter the locations
-  function filterLocations() {
-    return locations.filter((location) =>
-      location.toLowerCase().includes(searchedLocation.toLowerCase())
-    );
+  const [loading, setLoading] = useState(false);
+  const [locations, setLocations] = useState([]);
+  const API_KEY = process.env.REACT_APP_GOOGLE_API_KEY;
+  async function getAllLocations(query) {
+    try {
+      const { predictions } = await callGetApi(
+        `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${query}&key=${API_KEY}`
+      );
+      const formattedLocations = predictions.map((location) => ({
+        place_id: location.place_id,
+        name: location.structured_formatting.main_text,
+        description: location.structured_formatting.secondary_text,
+      }));
+      setLocations(formattedLocations);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
   }
+
+  async function getPlaceFromPlaceId(location) {
+    setLoading(true);
+    try {
+      const { result } = await callGetApi(
+        `https://maps.googleapis.com/maps/api/place/details/json?place_id=${location.place_id}&key=${API_KEY}`
+      );
+      click({
+        ...location,
+        lat: result.geometry.location.lat,
+        lng: result.geometry.location.lng,
+      });
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  function onChange(event) {
+    setLoading(true);
+    debounce(() => {
+      // this check required so that when the input is cleared
+      // we do not need to call the search driver api
+      if (event.target.value) {
+        getAllLocations(event.target.value);
+        return;
+      }
+      setLocations([]);
+      setLoading(false);
+    }, 800)();
+  }
+
+  const loadingSpinner = (
+    <div
+      className="d-flex align-items-center justify-content-center"
+      style={{ height: "150px" }}
+    >
+      <div
+        className="spinner-border spinner-border-lg"
+        role="status"
+        aria-hidden="true"
+      ></div>
+    </div>
+  );
+
   return (
     <div className={dropdownType}>
       <div
@@ -52,37 +112,46 @@ export default function LocationDropdown(props) {
                 className={inputStyles.formControl}
                 placeholder="Search Location"
                 autoComplete="off"
-                value={searchedLocation}
-                onChange={(event) => {
-                  setSearchedLocation(event.target.value);
-                }}
+                onChange={(event) => onChange(event)}
               />
             </div>
           </div>
         </div>
-        <div style={{ maxHeight: "300px", overflow: "auto" }}>
-          {filterLocations().length > 0 ? (
-            filterLocations().map((location) => {
+        <div style={{ maxHeight: "250px", overflow: "auto" }}>
+          {loading ? (
+            loadingSpinner
+          ) : locations.length > 0 ? (
+            locations.map((location) => {
               return (
                 <div
                   className={styles.dropdown_link_wrapper}
-                  key={location}
-                  onClick={() => click(location)}
+                  key={location.place_id}
+                  onClick={() => {
+                    getPlaceFromPlaceId(location);
+                  }}
                 >
-                  <p className={styles.dropdown_link}>{location}</p>
+                  <p className={styles.dropdown_link}>{location.name}</p>
+                  <p
+                    className={locationStyles.location_description}
+                    style={{ color: ONDC_COLORS.SECONDARYCOLOR }}
+                  >
+                    {location.description}
+                  </p>
                 </div>
               );
             })
           ) : (
             <div
-              style={{ height: "200px" }}
+              style={{ height: "150px" }}
               className="d-flex align-items-center justify-content-center"
             >
               <div className="text-center">
                 <div className="py-2"></div>
-                <h4 className={styles.empty_text_header}>No Location Found</h4>
+                <h4 className={styles.empty_text_header}>
+                  Search for location
+                </h4>
                 <p className={styles.empty_text_sub_header}>
-                  Search for something else
+                  Type the location you want to search
                 </p>
               </div>
             </div>

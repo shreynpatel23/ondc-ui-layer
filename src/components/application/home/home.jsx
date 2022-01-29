@@ -32,7 +32,7 @@ export default function Home() {
         message: {
           criteria: {
             search_string: searchValue,
-            delivery_location: "12.903561,77.5939631",
+            delivery_location: `${selectedLocation.lat},${selectedLocation.lng}`,
           },
         },
       });

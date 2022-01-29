@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import LocationSvg from "../../../shared/svg/location";
 import CrossSvg from "../../../shared/svg/cross";
 import ArrowDown from "../../../shared/svg/arrow-down";
@@ -7,11 +7,17 @@ import checkboxstyles from "./billingDetailsCard.module.scss";
 import { steps_to_checkout } from "../../../../constants/steps-to-checkout";
 import { ONDC_COLORS } from "../../../shared/colors";
 import AddAddressModal from "../add-address-modal/addAddressModal";
+import Button from "../../../shared/button/button";
+import { buttonTypes, buttonSize } from "../../../../utils/button";
 
 export default function BillingDetailsCard(props) {
-  const { currentStep, setCurrentStep } = props;
+  const {
+    currentStep,
+    billingAddress,
+    setBillingAddress,
+    onInitializeOrder,
+  } = props;
   const shippingAddress = JSON.parse(localStorage.getItem("shipping_address"));
-  const [billingAddress, setBillingAddress] = useState();
   const [toggleSameAsBillingAddress, setToggleSameAsBillingAddress] = useState(
     false
   );
@@ -24,12 +30,22 @@ export default function BillingDetailsCard(props) {
         <AddAddressModal
           onClose={() => setToggleBillingAddressModal(false)}
           onAddAddress={(value) => {
-            setBillingAddress(value);
+            const billing_address = {
+              name: value.name,
+              email: value.email,
+              phone: value.phoneNumber,
+              address: {
+                area_code: value.pinCode,
+                building: value.building,
+                city: value.city,
+                country: "IND",
+                door: value.landmark,
+                state: value.state,
+                street: value.street,
+              },
+            };
+            setBillingAddress(billing_address);
             setToggleBillingAddressModal(false);
-            setCurrentStep([
-              ...currentStep,
-              steps_to_checkout.SELECT_PAYMENT_METHOD,
-            ]);
           }}
         />
       )}
@@ -68,10 +84,6 @@ export default function BillingDetailsCard(props) {
                     return;
                   }
                   setBillingAddress(shippingAddress);
-                  setCurrentStep([
-                    ...currentStep,
-                    steps_to_checkout.SELECT_PAYMENT_METHOD,
-                  ]);
                 }}
               />
               <span className={checkboxstyles.checkmark}></span>
@@ -96,29 +108,29 @@ export default function BillingDetailsCard(props) {
                       </p>
                       <div className="py-2">
                         <p className={styles.street_name}>
-                          {billingAddress?.street}
+                          {billingAddress?.location?.address?.street}
                         </p>
                         <div className="d-flex align-items-center">
                           <div className="pe-1">
                             <p className={styles.city}>
-                              {billingAddress?.city},
+                              {billingAddress?.location?.address?.city},
                             </p>
                           </div>
                           <div className="pe-1">
                             <p className={styles.state}>
-                              {billingAddress?.state},
+                              {billingAddress?.location?.address?.state},
                             </p>
                           </div>
                           <div className="pe-1">
                             <p className={styles.country_code}>
-                              {billingAddress?.pinCode}
+                              {billingAddress?.location?.address?.area_code}
                             </p>
                           </div>
                         </div>
                       </div>
                       <div className="pt-2">
                         <p className={styles.person_name}>
-                          {billingAddress?.phoneNumber}
+                          {billingAddress?.phone}
                         </p>
                       </div>
                     </div>
@@ -152,6 +164,14 @@ export default function BillingDetailsCard(props) {
               </div>
             </>
           )}
+          <hr />
+          <Button
+            button_text="Initialize order"
+            type={buttonTypes.primary}
+            size={buttonSize.small}
+            disabled={!billingAddress}
+            onClick={onInitializeOrder}
+          />
         </div>
       )}
     </div>

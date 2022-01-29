@@ -15,7 +15,8 @@ export default function AddAddressModal(props) {
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
   const [pinCode, setPinCode] = useState("");
-
+  const [landmark, setLandmark] = useState("");
+  const [building, setBuilding] = useState("");
   return (
     <div className={styles.overlay}>
       <div className={styles.pop_up_card}>
@@ -75,6 +76,24 @@ export default function AddAddressModal(props) {
               <div className="col-md-6 col-sm-12">
                 <Input
                   type="text"
+                  placeholder="Enter Building Name"
+                  id="street_name"
+                  label_name="Building"
+                  onChange={(event) => setBuilding(event.target.value)}
+                />
+              </div>
+              <div className="col-md-6 col-sm-12">
+                <Input
+                  type="text"
+                  placeholder="Enter Landmark"
+                  id="landMark"
+                  label_name="Landmark"
+                  onChange={(event) => setLandmark(event.target.value)}
+                />
+              </div>
+              <div className="col-md-6 col-sm-12">
+                <Input
+                  type="text"
                   placeholder="Enter City"
                   id="city"
                   label_name="City"
@@ -122,7 +141,9 @@ export default function AddAddressModal(props) {
                       street === "" ||
                       city === "" ||
                       state === "" ||
-                      pinCode === ""
+                      pinCode === "" ||
+                      landmark === "" ||
+                      building === ""
                     }
                     onClick={() =>
                       onAddAddress({
@@ -133,6 +154,8 @@ export default function AddAddressModal(props) {
                         city,
                         state,
                         pinCode,
+                        landmark,
+                        building,
                       })
                     }
                   />

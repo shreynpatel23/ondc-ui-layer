@@ -20,6 +20,35 @@
   margin: 0;
 }
 
+.location_name {
+  font-size: $font-12;
+  width: 100%;
+  height: 50%;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: $medium;
+  color: $white;
+  margin: 0;
+  word-break: break-all;
+}
+
+.location_description {
+  width: 100%;
+  height: 50%;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: $font-10;
+  color: $white;
+  margin: 0;
+  word-break: break-all;
+}
+
 .input_wrapper {
   flex-basis: 65%;
   background-color: $white;
