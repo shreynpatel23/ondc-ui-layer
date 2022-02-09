@@ -4,8 +4,8 @@ import styles from "../../dropdown/dropdown.module.scss";
 import inputStyles from "../locationInput.module.scss";
 import SearchSvg from "../../svg/search";
 import { ONDC_COLORS } from "../../colors";
-import { callGetApi } from "../../../../api";
 import { debounce } from "../../../../utils/search";
+import axios from "axios";
 
 export default function LocationDropdown(props) {
   const { id, children, click, dropdownType } = props;
@@ -14,10 +14,10 @@ export default function LocationDropdown(props) {
   const API_KEY = process.env.REACT_APP_GOOGLE_API_KEY;
   async function getAllLocations(query) {
     try {
-      const { predictions } = await callGetApi(
+      const { data } = await axios.get(
         `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${query}&key=${API_KEY}`
       );
-      const formattedLocations = predictions.map((location) => ({
+      const formattedLocations = data.predictions.map((location) => ({
         place_id: location.place_id,
         name: location.structured_formatting.main_text,
         description: location.structured_formatting.secondary_text,
@@ -33,13 +33,13 @@ export default function LocationDropdown(props) {
   async function getPlaceFromPlaceId(location) {
     setLoading(true);
     try {
-      const { result } = await callGetApi(
+      const { data } = await axios.get(
         `https://maps.googleapis.com/maps/api/place/details/json?place_id=${location.place_id}&key=${API_KEY}`
       );
       click({
         ...location,
-        lat: result.geometry.location.lat,
-        lng: result.geometry.location.lng,
+        lat: data.result.geometry.location.lat,
+        lng: data.result.geometry.location.lng,
       });
     } catch (err) {
       console.log(err);

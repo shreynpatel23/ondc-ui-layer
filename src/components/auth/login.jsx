@@ -33,17 +33,6 @@ export default function Login() {
         setLoading(false);
       });
   }
-  //   async function saveUserInDatabse(user) {
-  //     try {
-  //       const data = await callPostApi(
-  //         "https://ondc-users.firebaseio.com/users.json",
-  //         user
-  //       );
-  //       console.log(data);
-  //     } catch (err) {
-  //       console.log(err);
-  //     }
-  //   }
   return (
     <div>
       <div

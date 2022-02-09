@@ -5,7 +5,10 @@ axios.defaults.baseURL = process.env.REACT_APP_BASE_URL;
 export function callGetApi(url) {
   return new Promise(async (resolve, reject) => {
     try {
-      const response = await axios.get(url);
+      const token = localStorage.getItem("token") || "";
+      const response = await axios.get(url, {
+        headers: { ...(token && { Authorization: `Bearer ${token}` }) },
+      });
       return resolve(response.data);
     } catch (err) {
       return reject(err);
@@ -13,10 +16,13 @@ export function callGetApi(url) {
   });
 }
 
-export function callPostApi(url, params) {
+export function callPostApi(url, params, header) {
   return new Promise(async (resolve, reject) => {
     try {
-      const response = await axios.post(url, params);
+      const token = localStorage.getItem("token") || "";
+      const response = await axios.post(url, params, {
+        headers: { ...(token && { Authorization: `Bearer ${token}` }) },
+      });
       return resolve(response.data);
     } catch (err) {
       return reject(err);

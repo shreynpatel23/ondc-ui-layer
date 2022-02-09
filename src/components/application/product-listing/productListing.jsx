@@ -1,11 +1,17 @@
-import React, { useState, useEffect, useCallback, useContext } from "react";
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useContext,
+  Fragment,
+} from "react";
 import styles from "../application.module.scss";
-import RestaurantCard from "./restaurant-card/restaurantWrapper";
 import { callGetApi } from "../../../api";
 import Toast from "../../shared/toast/toast";
 import empty_state from "../../../assets/images/empty_state.svg";
 import { CartContext } from "../../../context/cartContext";
 import OrderSummary from "./order-summary/orderSummary";
+import ProductCard from "./product-card/productCard";
 
 export default function ProductListing() {
   const message_id = localStorage.getItem("message_id") || "";
@@ -108,39 +114,39 @@ export default function ProductListing() {
           <div className="p-3">
             {/* PRODUCTS LIST  */}
             <div className={`py-2 container`}>
-              {products.length > 0
-                ? products?.map((product, index) => {
-                    return (
-                      <div
-                        className="row"
-                        key={`${product.bpp_id}-id-${index}`}
-                      >
-                        {product?.bpp_providers.map(
-                          (
-                            { id, descriptor, items, locations },
-                            product_index
-                          ) => {
-                            return (
-                              <div
-                                key={`${id}-product-id-${product_index}`}
-                                className="col-12"
-                              >
-                                <RestaurantCard
-                                  descriptor={descriptor}
-                                  items={items}
-                                  provider_name={product.bpp_descriptor.name}
-                                  bpp_id={product.bpp_id}
-                                  location_id={locations[0].id}
-                                  bpp_provider_id={id}
-                                />
-                              </div>
-                            );
-                          }
-                        )}
-                      </div>
-                    );
-                  })
-                : emptyState}
+              <div className="row">
+                {products.length > 0
+                  ? products?.map((product, index) => {
+                      return (
+                        <Fragment key={`${product.bpp_id}-id-${index}`}>
+                          {product?.bpp_providers.map(
+                            ({ id, descriptor, items, locations }) => {
+                              return (
+                                <Fragment>
+                                  {items.map((item) => {
+                                    return (
+                                      <div
+                                        key={item.id}
+                                        className="col-xl-3 col-lg-4 col-md-6 col-sm-6 p-3"
+                                      >
+                                        <ProductCard
+                                          product={item}
+                                          bpp_id={product.bpp_id}
+                                          location_id={locations[0].id}
+                                          bpp_provider_id={id}
+                                        />
+                                      </div>
+                                    );
+                                  })}
+                                </Fragment>
+                              );
+                            }
+                          )}
+                        </Fragment>
+                      );
+                    })
+                  : emptyState}
+              </div>
             </div>
           </div>
         )}

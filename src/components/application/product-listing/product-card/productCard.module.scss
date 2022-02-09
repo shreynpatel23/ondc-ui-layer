@@ -45,6 +45,12 @@ $card_width: 250px;
   word-break: break-all;
 }
 
+.product_desc {
+  font-size: $font-12;
+  color: $secondaryColor;
+  margin: 0;
+}
+
 .amount {
   font-size: $font-14;
   font-weight: 500;

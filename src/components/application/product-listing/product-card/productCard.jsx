@@ -48,11 +48,15 @@ export default function ProductCard(props) {
       </div>
       <div className={styles.description_container}>
         <div className={styles.description_wrapper}>
-          <p className={styles.product_name} title={descriptor.name}>
-            {descriptor.name}
+          <p
+            className={styles.product_name}
+            title={`${descriptor.name} from ${bpp_id}`}
+          >
+            {descriptor.name} <br />
+            <span className={styles.product_desc}>from {bpp_id}</span>
           </p>
         </div>
-        <div className="py-2 d-flex align-items-center">
+        <div className="d-flex align-items-center">
           <div className="d-flex align-items-center">
             <div className="pe-2">
               <RuppeSvg height="13" width="8" />
@@ -106,7 +110,7 @@ export default function ProductCard(props) {
                       bpp_id,
                       provider: {
                         id: bpp_provider_id,
-                        location: [location_id],
+                        locations: [location_id],
                       },
                       product: {
                         id: product.id,

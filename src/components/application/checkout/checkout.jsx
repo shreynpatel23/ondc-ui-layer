@@ -1,35 +1,28 @@
-import React, { useContext, useState, useEffect, useCallback } from "react";
+import React, { useContext, useEffect, useCallback, useState } from "react";
+import { Route, Switch } from "react-router-dom";
 import styles from "../application.module.scss";
 import cartStyles from "../product-listing/order-summary/cart-items/cartItems.module.scss";
-import empty_state from "../../../assets/images/empty_state.svg";
-import RuppeSvg from "../../shared/svg/ruppe";
-import SubstractSvg from "../../shared/svg/substract";
-import AddSvg from "../../shared/svg/add";
+import DeliveryInfo from "./delivery-info/deliveryInfo";
+import PaymentInfo from "./payment-info/paymentInfo";
 import { CartContext } from "../../../context/cartContext";
+import RuppeSvg from "../../shared/svg/ruppe";
+import ArrowDown from "../../shared/svg/arrow-down";
 import { ONDC_COLORS } from "../../shared/colors";
-import { useHistory } from "react-router-dom";
 import Button from "../../shared/button/button";
 import { buttonTypes, buttonSize } from "../../../utils/button";
-import ArrowDown from "../../shared/svg/arrow-down";
-import ShippingDetailsCard from "./shipping-details-card/shippingDetailsCard";
-import { steps_to_checkout } from "../../../constants/steps-to-checkout";
-import BillingDetailsCard from "./billing-details-card/billingDetailsCard";
-import PaymentTypesCard from "./payment-types-card/paymentTypesCard";
-import { callPostApi, callGetApi } from "../../../api";
-export default function Cart() {
+import { useHistory } from "react-router-dom";
+import empty_state from "../../../assets/images/empty_state.svg";
+import AddSvg from "../../shared/svg/add";
+import SubstractSvg from "../../shared/svg/substract";
+import { callGetApi, callPostApi } from "../../../api";
+
+export default function Checkout() {
   const history = useHistory();
   const transaction_id = localStorage.getItem("transaction_id") || "";
-  // const token = localStorage.getItem("token") || "";
   const { cartItems, onReduceQuantity, onAddQuantity } = useContext(
     CartContext
   );
   const [quoteMessageIds, setQuoteMessageIds] = useState("");
-  const [currentStep, setCurrentStep] = useState([
-    steps_to_checkout.ADD_SHIPPING_DETAILS,
-  ]);
-  const [shippingAddress, setShippingAddress] = useState();
-  const [billingAddress, setBillingAddress] = useState();
-
   let quoteTimer;
 
   const onGetQuote = useCallback(async () => {
@@ -77,7 +70,7 @@ export default function Cart() {
   }, [quoteMessageIds]);
 
   function callGetQuoteMultipleTimes() {
-    let counter = 2;
+    let counter = 5;
     quoteTimer = setInterval(async () => {
       if (counter <= 0) {
         clearInterval(quoteTimer);
@@ -88,12 +81,6 @@ export default function Cart() {
       });
     }, 2000);
   }
-
-  // api here for checkout cart
-  async function handleCheckout() {
-    console.log("checking out now");
-  }
-
   function getSubTotal() {
     let sum = 0;
     cartItems.forEach(({ product, quantity }) => {
@@ -106,7 +93,6 @@ export default function Cart() {
     });
     return sum;
   }
-
   const emptyState = (
     <div
       className="d-flex align-items-center justify-content-center"
@@ -132,19 +118,6 @@ export default function Cart() {
       </div>
     </div>
   );
-  const loadingSpinner = (
-    <div
-      className="d-flex align-items-center justify-content-center"
-      style={{ height: "50vh" }}
-    >
-      <div
-        className="spinner-border spinner-border-lg"
-        role="status"
-        aria-hidden="true"
-      ></div>
-    </div>
-  );
-
   return (
     <div className={styles.background}>
       {cartItems.length > 0 ? (
@@ -171,36 +144,16 @@ export default function Cart() {
             {/* GRID FOR SHOPPING DETAILS AND SUMMARY  */}
             <div className="col-lg-8 py-2">
               <div className="row">
-                {/* SHIPPING DETAILS  */}
-                <div className="col-12 pb-3">
-                  <ShippingDetailsCard
-                    currentStep={currentStep}
-                    setCurrentStep={(value) => setCurrentStep(value)}
-                    shippingAddress={shippingAddress}
-                    setShippingAddress={(value) => setShippingAddress(value)}
+                <Switch>
+                  <Route
+                    path={"/checkout/delivery-info"}
+                    component={DeliveryInfo}
                   />
-                </div>
-                {/* BILLING DETAILS  */}
-                <div className="col-12 py-3">
-                  <BillingDetailsCard
-                    currentStep={currentStep}
-                    billingAddress={billingAddress}
-                    setBillingAddress={(value) => setBillingAddress(value)}
-                    onOrderInitialized={() =>
-                      setCurrentStep([
-                        ...currentStep,
-                        steps_to_checkout.SELECT_PAYMENT_METHOD,
-                      ])
-                    }
+                  <Route
+                    path={"/checkout/payment-info"}
+                    component={PaymentInfo}
                   />
-                </div>
-                {/* PAYMENT DETAILS  */}
-                <div className="col-12 py-3">
-                  <PaymentTypesCard
-                    currentStep={currentStep}
-                    setCurrentStep={(value) => setCurrentStep(value)}
-                  />
-                </div>
+                </Switch>
               </div>
             </div>
             <div className="col-lg-4 py-2">
@@ -290,17 +243,6 @@ export default function Cart() {
                         <p className={styles.sub_total_text}>{getSubTotal()}</p>
                       </div>
                     </div>
-                  </div>
-                  <div className="py-3">
-                    <Button
-                      button_text="Checkout"
-                      type={buttonTypes.primary}
-                      size={buttonSize.small}
-                      disabled={
-                        !currentStep.includes(steps_to_checkout.CHECKOUT)
-                      }
-                      onClick={handleCheckout}
-                    />
                   </div>
                 </div>
               </div>

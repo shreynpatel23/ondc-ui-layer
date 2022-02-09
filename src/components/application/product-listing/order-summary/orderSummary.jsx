@@ -97,7 +97,7 @@ export default function OrderSummary() {
                 button_text="View Cart"
                 type={buttonTypes.primary}
                 size={buttonSize.small}
-                onClick={() => history.push("/cart")}
+                onClick={() => history.push("/checkout/delivery-info")}
               />
             </div>
           </div>

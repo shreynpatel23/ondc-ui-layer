@@ -6,6 +6,7 @@ import ProductListing from "./components/application/product-listing/productList
 import Cart from "./components/application/cart/cart";
 import Login from "./components/auth/login";
 import ProtectedRoutes from "./protectedRoutes";
+import Checkout from "./components/application/checkout/checkout";
 
 export default class OndcRoutes extends React.Component {
   render() {
@@ -21,6 +22,9 @@ export default class OndcRoutes extends React.Component {
         </ProtectedRoutes>
         <ProtectedRoutes path="/cart">
           <Cart />
+        </ProtectedRoutes>
+        <ProtectedRoutes path="/checkout">
+          <Checkout />
         </ProtectedRoutes>
         <Route path="/page-not-found" component={PageNotFound} />
         <Route path="" component={() => <Redirect to="/page-not-found" />} />

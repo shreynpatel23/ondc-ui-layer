@@ -28,17 +28,14 @@ export default function ShippingDetailsCard(props) {
               name: value.name,
               email: value.email,
               phone: value.phoneNumber,
-              type: "home_delivery",
-              location: {
-                address: {
-                  area_code: value.pinCode,
-                  building: value.building,
-                  city: value.city,
-                  country: "IND",
-                  door: value.landmark,
-                  state: value.state,
-                  street: value.street,
-                },
+              address: {
+                area_code: value.pinCode,
+                building: value.building,
+                city: value.city,
+                country: "IND",
+                door: value.landmark,
+                state: value.state,
+                street: value.street,
               },
             };
             localStorage.setItem(
@@ -90,22 +87,22 @@ export default function ShippingDetailsCard(props) {
                   </p>
                   <div className="py-2">
                     <p className={styles.street_name}>
-                      {shippingAddress?.location?.address?.street}
+                      {shippingAddress?.address?.street}
                     </p>
                     <div className="d-flex align-items-center">
                       <div className="pe-1">
                         <p className={styles.city}>
-                          {shippingAddress?.location?.address?.city},
+                          {shippingAddress?.address?.city},
                         </p>
                       </div>
                       <div className="pe-1">
                         <p className={styles.state}>
-                          {shippingAddress?.location?.address?.state},
+                          {shippingAddress?.address?.state},
                         </p>
                       </div>
                       <div className="pe-1">
                         <p className={styles.country_code}>
-                          {shippingAddress?.location?.address?.area_code}
+                          {shippingAddress?.address?.area_code}
                         </p>
                       </div>
                     </div>
