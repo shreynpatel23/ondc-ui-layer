@@ -96,7 +96,6 @@ export default function ProductListing() {
       </div>
     </div>
   );
-
   return (
     <>
       <div

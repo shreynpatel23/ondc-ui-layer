@@ -35,17 +35,27 @@ export default function Checkout() {
 
   // use this effect for getting quote of the items
   useEffect(() => {
-    async function getQuote() {
+    function constructQouteObject() {
+      const map = new Map();
+      cartItems.map((item) => {
+        if (map.get(item.bpp_id)) {
+          return map.set(item.bpp_id, [...map.get(item.bpp_id), item]);
+        }
+        return map.set(item.bpp_id, [item]);
+      });
+      getQuote(Array.from(map.values()));
+    }
+    async function getQuote(items) {
       try {
         const data = await callPostApi(
           "/client/v2/get_quote",
-          cartItems.map((item) => ({
+          items.map((item) => ({
             context: {
               transaction_id,
             },
             message: {
               cart: {
-                items: [item],
+                items: item,
               },
             },
           }))
@@ -56,9 +66,7 @@ export default function Checkout() {
         console.log(err);
       }
     }
-    if (cartItems.length > 0) {
-      getQuote();
-    }
+    constructQouteObject();
   }, [cartItems, transaction_id]);
 
   // use this effect for calling apis of initialize order

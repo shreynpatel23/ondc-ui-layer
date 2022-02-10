@@ -36,7 +36,7 @@ export default function PaymentTypesCard(props) {
   const onConfirmOrder = useCallback(async (messageIds) => {
     try {
       const data = await callGetApi(
-        `/client/v2/on_initialize_order?messageIds=${messageIds}`
+        `/client/v2/on_confirm_order?messageIds=${messageIds}`
       );
       console.log(data);
     } catch (err) {
@@ -46,18 +46,29 @@ export default function PaymentTypesCard(props) {
     }
   }, []);
 
+  function constructConfirmOrderObject() {
+    const map = new Map();
+    cartItems.map((item) => {
+      if (map.get(item.bpp_id)) {
+        return map.set(item.bpp_id, [...map.get(item.bpp_id), item]);
+      }
+      return map.set(item.bpp_id, [item]);
+    });
+    confirmOrder(Array.from(map.values()));
+  }
+
   // use this api to initialize the order
-  async function confirmOrder() {
+  async function confirmOrder(items) {
     setLoading(true);
     try {
       const data = await callPostApi(
         "/client/v2/confirm_order",
-        cartItems.map((item) => ({
+        items.map((item) => ({
           context: {
             transaction_id,
           },
           message: {
-            items: [item],
+            items: item,
             billing_info: {
               address: {
                 door: billing_address?.address?.door,
@@ -161,7 +172,7 @@ export default function PaymentTypesCard(props) {
               size={buttonSize.small}
               loading={loading ? 1 : 0}
               disabled={!checked || loading}
-              onClick={confirmOrder}
+              onClick={constructConfirmOrderObject}
             />
           </div>
         </div>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ShippingDetailsCard from "../../cart/shipping-details-card/shippingDetailsCard";
 import BillingDetailsCard from "../../cart/billing-details-card/billingDetailsCard";
 import { steps_to_checkout } from "../../../../constants/steps-to-checkout";
@@ -11,6 +11,11 @@ export default function DeliveryInfo() {
     JSON.parse(localStorage.getItem("shipping_address")) || null;
   const billing_address =
     JSON.parse(localStorage.getItem("billing_address")) || null;
+  useEffect(() => {
+    if (shipping_address) {
+      setCurrentStep([...currentStep, steps_to_checkout.ADD_BILLING_DETAILS]);
+    }
+  }, []);
   const [shippingAddress, setShippingAddress] = useState(shipping_address);
   const [billingAddress, setBillingAddress] = useState(billing_address);
   return (

@@ -32,7 +32,7 @@ export default function Navbar() {
             <div className="ms-auto d-flex align-items-center">
               <div className="p-3">
                 <div
-                  onClick={() => history.push("/cart")}
+                  onClick={() => history.push("/checkout/delivery-info")}
                   style={{ position: "relative", cursor: "pointer" }}
                 >
                   {cartItems.length > 0 && (

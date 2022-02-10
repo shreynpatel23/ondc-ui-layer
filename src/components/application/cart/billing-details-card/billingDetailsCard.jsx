@@ -42,18 +42,29 @@ export default function BillingDetailsCard(props) {
     }
   }, []);
 
+  function constructInitializeOrderObject() {
+    const map = new Map();
+    cartItems.map((item) => {
+      if (map.get(item.bpp_id)) {
+        return map.set(item.bpp_id, [...map.get(item.bpp_id), item]);
+      }
+      return map.set(item.bpp_id, [item]);
+    });
+    initializeOrder(Array.from(map.values()));
+  }
+
   // use this api to initialize the order
-  async function initializeOrder() {
+  async function initializeOrder(items) {
     setLoading(true);
     try {
       const data = await callPostApi(
         "/client/v2/initialize_order",
-        cartItems.map((item) => ({
+        items.map((item) => ({
           context: {
             transaction_id,
           },
           message: {
-            items: [item],
+            items: item,
             billing_info: {
               address: {
                 door: billingAddress?.address?.door,
@@ -265,7 +276,7 @@ export default function BillingDetailsCard(props) {
               size={buttonSize.small}
               loading={loading ? 1 : 0}
               disabled={!billingAddress || loading}
-              onClick={initializeOrder}
+              onClick={constructInitializeOrderObject}
             />
           </div>
         </div>
