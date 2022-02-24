@@ -7,18 +7,22 @@ import Button from "../../../shared/button/button";
 import { buttonTypes, buttonSize } from "../../../../utils/button";
 import { callGetApi, callPostApi } from "../../../../api";
 import { CartContext } from "../../../../context/cartContext";
+import OrderIdListModal from "../order-id-list-modal/orderIdListModal";
+import { useHistory } from "react-router-dom";
 
 export default function PaymentTypesCard(props) {
   const { currentStep } = props;
+  const history = useHistory();
   let checkoutTimer;
   const transaction_id = localStorage.getItem("transaction_id") || "";
   const shipping_address =
     JSON.parse(localStorage.getItem("shipping_address")) || {};
   const billing_address =
     JSON.parse(localStorage.getItem("billing_address")) || {};
-  const { cartItems } = useContext(CartContext);
+  const { cartItems, setCartItems } = useContext(CartContext);
   const [checked, setChecked] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [orderIds, setOrderIds] = useState([]);
 
   function getSubTotal() {
     let sum = 0;
@@ -38,7 +42,15 @@ export default function PaymentTypesCard(props) {
       const data = await callGetApi(
         `/client/v2/on_confirm_order?messageIds=${messageIds}`
       );
-      console.log(data);
+      const map = new Map();
+      data.map((item) => {
+        const order_id = item?.message?.order?.id;
+        if (map.get(order_id) && order_id) {
+          return map.set(order_id, [...map.get(order_id), order_id]);
+        }
+        return map.set(order_id, order_id);
+      });
+      setOrderIds(Array.from(map.values()));
     } catch (err) {
       console.log(err);
     } finally {
@@ -129,6 +141,19 @@ export default function PaymentTypesCard(props) {
   }
   return (
     <div className={styles.cart_card}>
+      {orderIds.length > 0 && (
+        <OrderIdListModal
+          orderIds={orderIds}
+          onClose={() => {
+            setOrderIds([]);
+            setCartItems([]);
+            localStorage.removeItem("billing_address");
+            localStorage.removeItem("transaction_id");
+            localStorage.removeItem("message_id");
+            history.push("/home");
+          }}
+        />
+      )}
       <div className={`d-flex align-items-center ${styles.cart_card_spacing}`}>
         <p className={styles.cart_card_header}>Payment Type</p>
         <div className="ms-auto px-2">

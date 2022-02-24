@@ -19,10 +19,10 @@ import { callGetApi, callPostApi } from "../../../api";
 export default function Checkout() {
   const history = useHistory();
   const transaction_id = localStorage.getItem("transaction_id") || "";
-  const { cartItems, onReduceQuantity, onAddQuantity } = useContext(
-    CartContext
-  );
+  const { cartItems, onReduceQuantity, onAddQuantity } =
+    useContext(CartContext);
   const [quoteMessageIds, setQuoteMessageIds] = useState("");
+  const [loading, setLoading] = useState(true);
   let quoteTimer;
 
   const onGetQuote = useCallback(async () => {
@@ -78,9 +78,10 @@ export default function Checkout() {
   }, [quoteMessageIds]);
 
   function callGetQuoteMultipleTimes() {
-    let counter = 5;
+    let counter = 3;
     quoteTimer = setInterval(async () => {
       if (counter <= 0) {
+        setLoading(false);
         clearInterval(quoteTimer);
         return;
       }
@@ -101,6 +102,20 @@ export default function Checkout() {
     });
     return sum;
   }
+
+  const loadingSpinner = (
+    <div
+      className="d-flex align-items-center justify-content-center"
+      style={{ height: "50vh" }}
+    >
+      <div
+        className="spinner-border spinner-border-lg"
+        role="status"
+        aria-hidden="true"
+      ></div>
+    </div>
+  );
+
   const emptyState = (
     <div
       className="d-flex align-items-center justify-content-center"
@@ -129,126 +144,138 @@ export default function Checkout() {
   return (
     <div className={styles.background}>
       {cartItems.length > 0 ? (
-        <div className="container py-4">
-          <div className="row">
-            <div className="col-12">
-              <div className="py-2 d-inline-flex">
-                <div
-                  className="d-flex align-items-center"
-                  style={{ cursor: "pointer" }}
-                  onClick={() => history.push("/products")}
-                >
-                  <div style={{ transform: "rotate(90deg" }}>
-                    <ArrowDown color={ONDC_COLORS.SECONDARYCOLOR} />
+        loading ? (
+          loadingSpinner
+        ) : (
+          <div className="container py-4">
+            <div className="row">
+              <div className="col-12">
+                <div className="py-2 d-inline-flex">
+                  <div
+                    className="d-flex align-items-center"
+                    style={{ cursor: "pointer" }}
+                    onClick={() => history.push("/products")}
+                  >
+                    <div style={{ transform: "rotate(90deg" }}>
+                      <ArrowDown color={ONDC_COLORS.SECONDARYCOLOR} />
+                    </div>
+                    <p className={styles.back_text}>back</p>
                   </div>
-                  <p className={styles.back_text}>back</p>
                 </div>
               </div>
-            </div>
-            {/* CHECKOUT LABEL  */}
-            <div className="col-12">
-              <p className={`pb-2 ${cartStyles.label}`}>Checkout</p>
-            </div>
-            {/* GRID FOR SHOPPING DETAILS AND SUMMARY  */}
-            <div className="col-lg-8 py-2">
-              <div className="row">
-                <Switch>
-                  <Route
-                    path={"/checkout/delivery-info"}
-                    component={DeliveryInfo}
-                  />
-                  <Route
-                    path={"/checkout/payment-info"}
-                    component={PaymentInfo}
-                  />
-                </Switch>
+              {/* CHECKOUT LABEL  */}
+              <div className="col-12">
+                <p className={`pb-2 ${cartStyles.label}`}>Checkout</p>
               </div>
-            </div>
-            <div className="col-lg-4 py-2">
-              {/* SUMMARY HERE  */}
-              <div className={styles.cart_card}>
-                <div className={styles.cart_card_spacing}>
-                  <p className={styles.cart_card_header}>Summary</p>
+              {/* GRID FOR SHOPPING DETAILS AND SUMMARY  */}
+              <div className="col-lg-8 py-2">
+                <div className="row">
+                  <Switch>
+                    <Route
+                      path={"/checkout/delivery-info"}
+                      component={DeliveryInfo}
+                    />
+                    <Route
+                      path={"/checkout/payment-info"}
+                      component={PaymentInfo}
+                    />
+                  </Switch>
                 </div>
-                <div className={styles.cart_card_spacing}>
-                  {cartItems.map((item) => {
-                    const { product, id, quantity } = item;
-                    return (
-                      <div key={id} className="d-flex align-items-start pb-3">
-                        {/* PRODUCT NAME AND AMOUNT  */}
-                        <div className="pe-3 flex-grow-1">
-                          <p
-                            className={cartStyles.product_name}
-                            title={product.descriptor.name}
-                            style={{ width: "95%", height: "100%" }}
-                          >
-                            {product.descriptor.name}
-                          </p>
-                          <div className="d-flex align-items-center">
-                            <div className="pe-1">
-                              <RuppeSvg
-                                height="10"
-                                width="7"
-                                color={ONDC_COLORS.SECONDARYCOLOR}
-                              />
-                            </div>
+              </div>
+              <div className="col-lg-4 py-2">
+                {/* SUMMARY HERE  */}
+                <div className={styles.cart_card}>
+                  <div className={styles.cart_card_spacing}>
+                    <p className={styles.cart_card_header}>Summary</p>
+                  </div>
+                  <div className={styles.cart_card_spacing}>
+                    {cartItems.map((item) => {
+                      const { product, id, quantity } = item;
+                      return (
+                        <div key={id} className="d-flex align-items-start pb-3">
+                          {/* PRODUCT NAME AND AMOUNT  */}
+                          <div className="pe-3 flex-grow-1">
                             <p
-                              className={cartStyles.amount}
-                              style={{
-                                fontSize: "12px",
-                                color: ONDC_COLORS.SECONDARYCOLOR,
-                              }}
+                              className={cartStyles.product_name}
+                              title={product.descriptor.name}
+                              style={{ width: "95%", height: "100%" }}
                             >
-                              {Math.round(quantity.count * product.price.value)}
+                              {product.descriptor.name}
                             </p>
-                          </div>
-                        </div>
-                        <div className="ms-auto px-1">
-                          {/* QUANTITY BUTTON  */}
-                          <div
-                            className={cartStyles.add_to_cart_button_wrapper}
-                          >
                             <div className="d-flex align-items-center">
-                              <div
-                                className="px-1 flex-fill"
-                                style={{ cursor: "pointer" }}
-                                onClick={() => onReduceQuantity(id)}
-                              >
-                                <SubstractSvg color={ONDC_COLORS.ACCENTCOLOR} />
+                              <div className="pe-1">
+                                <RuppeSvg
+                                  height="10"
+                                  width="7"
+                                  color={ONDC_COLORS.SECONDARYCOLOR}
+                                />
                               </div>
-                              <div className="px-2 flex-fill">
-                                <p
-                                  className={cartStyles.add_to_cart_button_text}
+                              <p
+                                className={cartStyles.amount}
+                                style={{
+                                  fontSize: "12px",
+                                  color: ONDC_COLORS.SECONDARYCOLOR,
+                                }}
+                              >
+                                {Math.round(
+                                  quantity.count * product.price.value
+                                )}
+                              </p>
+                            </div>
+                          </div>
+                          <div className="ms-auto px-1">
+                            {/* QUANTITY BUTTON  */}
+                            <div
+                              className={cartStyles.add_to_cart_button_wrapper}
+                            >
+                              <div className="d-flex align-items-center">
+                                <div
+                                  className="px-1 flex-fill"
+                                  style={{ cursor: "pointer" }}
+                                  onClick={() => onReduceQuantity(id)}
                                 >
-                                  {quantity.count}
-                                </p>
-                              </div>
-                              <div
-                                className="px-1 flex-fill"
-                                style={{ cursor: "pointer" }}
-                                onClick={() => onAddQuantity(id)}
-                              >
-                                <AddSvg color={ONDC_COLORS.ACCENTCOLOR} />
+                                  <SubstractSvg
+                                    color={ONDC_COLORS.ACCENTCOLOR}
+                                  />
+                                </div>
+                                <div className="px-2 flex-fill">
+                                  <p
+                                    className={
+                                      cartStyles.add_to_cart_button_text
+                                    }
+                                  >
+                                    {quantity.count}
+                                  </p>
+                                </div>
+                                <div
+                                  className="px-1 flex-fill"
+                                  style={{ cursor: "pointer" }}
+                                  onClick={() => onAddQuantity(id)}
+                                >
+                                  <AddSvg color={ONDC_COLORS.ACCENTCOLOR} />
+                                </div>
                               </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    );
-                  })}
-                  <hr />
-                  <div className="d-flex align-items-center">
-                    <p className={styles.sub_total_text}>SubTotal:</p>
-                    <div className="ms-auto d-flex align-items-center">
-                      <div className="px-1">
-                        <RuppeSvg
-                          height="13"
-                          width="8"
-                          color={ONDC_COLORS.PRIMARYCOLOR}
-                        />
-                      </div>
-                      <div className="px-1">
-                        <p className={styles.sub_total_text}>{getSubTotal()}</p>
+                      );
+                    })}
+                    <hr />
+                    <div className="d-flex align-items-center">
+                      <p className={styles.sub_total_text}>SubTotal:</p>
+                      <div className="ms-auto d-flex align-items-center">
+                        <div className="px-1">
+                          <RuppeSvg
+                            height="13"
+                            width="8"
+                            color={ONDC_COLORS.PRIMARYCOLOR}
+                          />
+                        </div>
+                        <div className="px-1">
+                          <p className={styles.sub_total_text}>
+                            {getSubTotal()}
+                          </p>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -256,7 +283,7 @@ export default function Checkout() {
               </div>
             </div>
           </div>
-        </div>
+        )
       ) : (
         emptyState
       )}
